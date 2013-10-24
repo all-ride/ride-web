@@ -311,7 +311,7 @@ class WebApplication implements Application {
         }
 
         try {
-            $this->route($this->request);
+            $this->route();
 
             $this->state = self::STATE_DISPATCH;
 
@@ -376,19 +376,23 @@ class WebApplication implements Application {
     }
 
     /**
-     * Gets a request object from the router and sets it to this instance of Zibo
+     * Performs the routing
      * @return null
      */
-    protected function route(Request $request) {
-        $method = $request->getMethod();
-        $path = $request->getBasePath();
-        $baseUrl = $request->getBaseUrl();
+    protected function route() {
+        $this->eventManager->triggerEvent(self::EVENT_PRE_ROUTE, array('web' => $this));
+
+        if (!$this->request) {
+            return;
+        }
+
+        $method = $this->request->getMethod();
+        $path = $this->request->getBasePath();
+        $baseUrl = $this->request->getBaseUrl();
 
         if ($this->log) {
             $this->log->logDebug('Routing ' . $method . ' ' . $path, $baseUrl, System::LOG_SOURCE);
         }
-
-        $this->eventManager->triggerEvent(self::EVENT_PRE_ROUTE, array('web' => $this));
 
         $routerResult = $this->router->route($method, $path, $baseUrl);
         if (!$routerResult->isEmpty()) {
