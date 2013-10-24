@@ -1,0 +1,102 @@
+<?php
+
+namespace pallo\web\mvc\dispatcher;
+
+use pallo\application\system\System;
+
+use pallo\library\decorator\Decorator;
+use pallo\library\mvc\dispatcher\GenericDispatcher;
+use pallo\library\log\Log;
+
+/**
+ * Dispatcher with log support
+ */
+class LoggedDispatcher extends GenericDispatcher {
+
+    /**
+     * Instance of the log
+     * @var pallo\library\log\Log
+     */
+    protected $log;
+
+    /**
+     * Decorator for logged values
+     * @var pallo\library\decorator\Decorator
+     */
+    protected $valueDecorator;
+
+    /**
+     * Sets the log
+     * @param pallo\library\log\Log $log
+     * @return null
+     */
+    public function setLog(Log $log) {
+        $this->log = $log;
+    }
+
+    /**
+     * Gets the dependency injector
+     * @return pallo\library\log\Log|null
+     */
+    public function getLog(Log $log) {
+        return $this->log;
+    }
+
+    /**
+     * Sets the value decorator for logged values
+     * @param pallo\library\decorator\Decorator
+     * @return null
+     */
+    public function setValueDecorator(Decorator $valueDecorator) {
+        $this->valueDecorator = $valueDecorator;
+    }
+
+    /**
+     * Gets the value decorator for logged values
+     * @return pallo\library\decorator\Decorator
+     */
+    public function getValueDecorator() {
+        return $this->valueDecorator;
+    }
+
+    /**
+     * Invokes and logs the callback
+     * @return mixed Return value of the callback
+     */
+    protected function invokeCallback() {
+        if (!$this->log) {
+            return parent::invokeCallback();
+        }
+
+        if ($this->valueDecorator) {
+            $arguments = $this->valueDecorator->decorate($this->arguments);
+        } else {
+            $arguments = '[...]';
+        }
+
+        $controller = $this->callback->getClass();
+        if (!$controller) {
+            $this->log->logDebug('Invoking ' . $this->callback->getMethod(), $arguments, System::LOG_SOURCE);
+
+            return $this->invoker->invoke($this->callback, $this->arguments, $this->route->isDynamic());
+        }
+
+        $returnValue = null;
+
+        $controllerClass = get_class($controller);
+
+        $this->log->logDebug('Invoking ' . $controllerClass . '->preAction', null, System::LOG_SOURCE);
+        if ($controller->preAction()) {
+            $this->log->logDebug('Invoking ' . $controllerClass . '->' . $this->callback->getMethod(), $arguments, System::LOG_SOURCE);
+            $returnValue = $this->invoker->invoke($this->callback, $this->arguments, $this->route->isDynamic());
+
+            $this->log->logDebug('Invoking ' . $controllerClass . '->postAction', null, System::LOG_SOURCE);
+            $controller->postAction();
+        } else {
+            $this->log->logDebug('Skipping ' . $controllerClass . '->' . $this->callback->getMethod(), 'preAction returned false', System::LOG_SOURCE);
+        }
+
+        return $returnValue;
+    }
+
+}
