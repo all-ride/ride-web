@@ -1,0 +1,238 @@
+{
+    "dependencies": [
+        {
+            "class": "pallo\\library\\http\\HttpFactory",
+            "calls": [
+                {
+                    "method": "setRequestClass",
+                    "arguments": [
+                        {
+                            "name": "requestClass",
+                            "type": "parameter",
+                            "properties": {
+                                "key": "system.class.request",
+                                "default": "pallo\\web\\mvc\\Request"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "method": "setResponseClass",
+                    "arguments": [
+                        {
+                            "name": "responseClass",
+                            "type": "parameter",
+                            "properties": {
+                                "key": "system.class.response",
+                                "default": "pallo\\library\\mvc\\Response"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "class": "pallo\\library\\system\\file\\File",
+            "id": "session",
+            "calls": [
+                {
+                    "method": "__construct",
+                    "arguments": [
+                        {
+                            "name": "path",
+                            "type": "parameter",
+                            "properties": {
+                                "key": "system.session.path"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "interfaces": "pallo\\library\\http\\session\\io\\SessionIO",
+            "class": "pallo\\web\\http\\session\\io\\FileSessionIO",
+            "id": "file",
+            "calls": [
+                {
+                    "method": "__construct",
+                    "arguments": [
+                        {
+                            "name": "path",
+                            "type": "dependency",
+                            "properties": {
+                                "interface": "pallo\\library\\system\\file\\File",
+                                "id": "session"
+                            }
+                        },
+                        {
+                            "name": "timeout",
+                            "type": "parameter",
+                            "properties": {
+                                "key": "app.session.timeout",
+                                "default": 1800
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "interfaces": "pallo\\web\\router\\io\\RouteContainerIO", 
+            "class": "pallo\\web\\router\\io\\ParserRouteContainerIO",
+            "id": "web",
+            "calls": [
+                {
+                    "method": "__construct",
+                    "arguments": [
+                        {
+                            "name": "parser",
+                            "type": "dependency",
+                            "properties": {
+                                "interface": "pallo\\library\\config\\parser\\Parser",
+                                "id": "json"
+                            }
+                        },
+                        {
+                            "name": "path",
+                            "type": "parameter",
+                            "properties": {
+                                "key": "system.directory.config",
+                                "default": "config"
+                            }
+                        },
+                        {
+                            "name": "file",
+                            "type": "scalar",
+                            "properties": {
+                                "value": "routes.json"
+                            }
+                        }
+                    ]
+                },
+                "setConfig"
+            ]
+        },
+        {
+            "interfaces": "pallo\\library\\router\\Router",
+            "class": "pallo\\library\\router\\GenericRouter",
+            "id": "web",
+            "calls": [
+                {
+                    "method": "__construct",
+                    "arguments": [
+                        {
+                            "name": "routeContainer",
+                            "type": "call",
+                            "properties": {
+                                "interface": "pallo\\web\\router\\io\\RouteContainerIO",
+                                "method": "getRouteContainer"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "method": "setDefaultCallback",
+                    "arguments": [
+                        {
+                            "name": "defaultCallback",
+                            "type": "parameter",
+                            "properties": {
+                                "key": "app.default.action"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "class": "pallo\\library\\system\\file\\File",
+            "id": "public",
+            "calls": [
+                {
+                    "method": "__construct",
+                    "arguments": [
+                        {
+                            "name": "path",
+                            "type": "call",
+                            "properties": {
+                                "interface": "pallo\\library\\system\\file\\browser\\FileBrowser",
+                                "method": "getPublicPath"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },            
+        {
+            "interfaces": "pallo\\library\\mvc\\controller\\Controller",
+            "class": "pallo\\web\\mvc\\controller\\FileController",
+            "id": "public",
+            "calls": [
+                {
+                    "method": "__construct",
+                    "arguments": [
+                        {
+                            "name": "path",
+                            "type": "dependency",
+                            "properties": {
+                                "interface": "pallo\\library\\system\\file\\File",
+                                "id": "public"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "interfaces": "pallo\\library\\mvc\\dispatcher\\Dispatcher",
+            "class": "pallo\\web\\mvc\\dispatcher\\DependencyDispatcher",
+            "id": "dependency",
+            "calls": [
+                "setConfig", 
+                "setDependencyInjector", 
+                "setLog",
+                {
+                    "method": "setValueDecorator",
+                    "arguments": [
+                        {
+                            "name": "valueDecorator",
+                            "type": "dependency",
+                            "properties": {
+                                "interface": "pallo\\library\\decorator\\Decorator",
+                                "id": "variable"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "interfaces": "pallo\\application\\Application",
+            "class": "pallo\\web\\WebApplication",
+            "id": "web",
+            "calls": [
+                "setDependencyInjector",
+                "setLog",
+                {
+                    "method": "setSessionTimeout",
+                    "arguments": [
+                        {
+                            "name": "sessionTimeout",
+                            "type": "call",
+                            "properties": {
+                                "interface": "pallo\\library\\http\\session\\io\\SessionIO",
+                                "method": "getTimeout"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "interfaces": "pallo\\web\\mime\\MimeResolver",
+            "class": "pallo\\web\\mime\\ConfigMimeResolver",
+            "id": "config"
+        }
+    ]
+}
