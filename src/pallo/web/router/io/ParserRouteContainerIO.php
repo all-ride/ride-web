@@ -143,7 +143,7 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
         }
 
         if (isset($routeStruct['methods'])) {
-            $allowedMethods = $this->processParameter($routeStruct['methods']);
+            $allowedMethods = $routeStruct['methods'];
             unset($routeStruct['methods']);
         } else {
             $allowedMethods = null;
