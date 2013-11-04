@@ -17,6 +17,8 @@ use pallo\library\mvc\Response;
 use pallo\library\router\Router;
 use pallo\library\router\Route;
 
+use \Exception;
+
 /**
  * Pallo web application
  */
@@ -306,8 +308,8 @@ class WebApplication implements Application {
         $this->response = $this->httpFactory->createResponse();
 
         if ($this->dependencyInjector) {
-            $this->dependencyInjector->setInstance($this->request, 'pallo\library\mvc\Request');
-            $this->dependencyInjector->setInstance($this->request, 'pallo\library\mvc\Response');
+            $this->dependencyInjector->setInstance($this->request, array('pallo\\library\\http\\Request', 'pallo\\library\\mvc\\Request'));
+            $this->dependencyInjector->setInstance($this->request, array('pallo\\library\\httþ\\Response', 'pallo\\library\\mvc\\Response'));
         }
 
         try {
@@ -355,8 +357,8 @@ class WebApplication implements Application {
         $this->sendResponse();
 
         if ($this->dependencyInjector) {
-            $this->dependencyInjector->unsetInstance('pallo\library\mvc\Request');
-            $this->dependencyInjector->unsetInstance('pallo\library\mvc\Response');
+            $this->dependencyInjector->unsetInstance(array('pallo\\library\\http\\Request', 'pallo\\library\\mvc\\Request'));
+            $this->dependencyInjector->unsetInstance(array('pallo\\library\\http\\Response', 'pallo\\library\\mvc\\Response'));
         }
 
         $this->request = null;
@@ -398,7 +400,7 @@ class WebApplication implements Application {
         if (!$routerResult->isEmpty()) {
             $route = $routerResult->getRoute();
             if ($route) {
-                $request->setRoute($route);
+                $this->request->setRoute($route);
             } else {
                 $this->setRequest(null);
 
