@@ -85,6 +85,12 @@ class LoggedDispatcher extends GenericDispatcher {
 
         $controllerClass = get_class($controller);
 
+        if (!$this->isController) {
+            $this->log->logDebug('Invoking ' . $controllerClass . '->' . $this->callback->getMethod(), $arguments, System::LOG_SOURCE);
+
+            return $this->invoker->invoke($this->callback, $this->arguments, $this->route->isDynamic());
+        }
+
         $this->log->logDebug('Invoking ' . $controllerClass . '->preAction', null, System::LOG_SOURCE);
         if ($controller->preAction()) {
             $this->log->logDebug('Invoking ' . $controllerClass . '->' . $this->callback->getMethod(), $arguments, System::LOG_SOURCE);
