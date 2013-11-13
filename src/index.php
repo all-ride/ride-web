@@ -16,7 +16,7 @@ try {
         $parameters = null;
     }
 
-    // service the cli
+    // service the web
     $system = new pallo\application\system\System($parameters);
     $system->service('web');
 } catch (Exception $exception) {

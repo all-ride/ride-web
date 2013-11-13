@@ -32,6 +32,24 @@
             ]
         },
         {
+            "interfaces": ["pallo\\library\\http\\Request", "pallo\\library\\mvc\\Request"],
+            "class": "pallo\\library\\mvc\\Request",
+            "calls": [
+               {
+                   "method": "__construct",
+                   "arguments": [
+                       {
+                           "name": "path",
+                           "type": "scalar",
+                           "properties": {
+                               "value": "/"
+                           }
+                       }
+                   ]
+               }
+            ]
+        },        
+        {
             "class": "pallo\\library\\system\\file\\File",
             "id": "session",
             "calls": [
