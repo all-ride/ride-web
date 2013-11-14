@@ -4,6 +4,7 @@ namespace pallo\web\mvc\controller;
 
 use pallo\library\config\Config;
 use pallo\library\dependency\DependencyInjector;
+use pallo\library\event\Event;
 use pallo\library\http\Header;
 use pallo\library\mvc\controller\AbstractController as LibAbstractController;
 use pallo\library\system\file\File;
@@ -106,19 +107,23 @@ abstract class AbstractController extends LibAbstractController {
         $this->response->setView($view);
 
         if ($cleanUp) {
-            $this->downloadFile = $file;
-
-            $eventManager = $this->dependencyInjector->get('pallo\\library\\event\\EventManager');
-            $eventManager->registerEventListener(WebApplication::EVENT_POST_RESPONSE, array($this, 'cleanUpDownload'));
+            $this->cleanUpDownload($file);
         }
     }
 
     /**
      * Cleans up the download file
+     * @param pallo\library\system\file\File $file File to clean up after the response
+     * @param pallo\library\event\Event $event Triggered event
      * @return null
      */
-    public function cleanUpDownload() {
-        if (isset($this->downloadFile) && $this->downloadFile) {
+    public function cleanUpDownload(File $file = null, Event $event = null) {
+        if ($file) {
+            $this->downloadFile = $file;
+
+            $eventManager = $this->dependencyInjector->get('pallo\\library\\event\\EventManager');
+            $eventManager->addEventListener(WebApplication::EVENT_POST_RESPONSE, array($this, 'cleanUpDownload'));
+        } elseif (isset($this->downloadFile) && $this->downloadFile) {
             $this->downloadFile->delete();
         }
     }
