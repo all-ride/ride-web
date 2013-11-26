@@ -147,6 +147,10 @@ class ExceptionView implements View {
      * @return array Array containing the values needed to display the exception
      */
     protected function getExceptionSource(Exception $exception, $offset = 5) {
+        if (!file_exists($exception->getFile())) {
+            return '';
+        }
+
         $source = new String(file_get_contents($exception->getFile()));
         $source = $source->addLineNumbers();
         $source = explode("\n", $source);

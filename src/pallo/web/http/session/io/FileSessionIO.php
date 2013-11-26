@@ -113,7 +113,12 @@ class FileSessionIO implements SessionIO {
 
         $serialized = $file->read();
 
-        return unserialize($serialized);
+        $data = unserialize($serialized);
+        if ($data === false) {
+            $data = array();
+        }
+
+        return $data;
     }
 
     /**
