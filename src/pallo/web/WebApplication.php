@@ -248,6 +248,24 @@ class WebApplication implements Application {
     }
 
     /**
+     * Gets the URL of the provided route
+     * @param string $routeId The id of the route
+     * @param array $arguments Path arguments for the route
+     * @return string
+     */
+    public function getUrl($routeId, array $arguments = null) {
+        if (!$this->router) {
+            throw new Exception('Could not get the URL for ' . $routeId . ': no router set');
+        } elseif (!$this->request) {
+            throw new Exception('Could not get the URL for ' . $routeId . ': no request set');
+        }
+
+        $routeContainer = $this->router->getRouteContainer();
+
+        return $routeContainer->getUrl($this->request->getBaseScript(), $routeId, $arguments);
+    }
+
+    /**
      * Sets the dispatcher
      * @param pallo\library\mvc\dispatcher\Dispatcher $dispatcher
      * @return null

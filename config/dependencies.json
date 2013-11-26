@@ -226,7 +226,7 @@
             ]
         },
         {
-            "interfaces": "pallo\\application\\Application",
+            "interfaces": ["pallo\\application\\Application", "pallo\\web\\WebApplication"],
             "class": "pallo\\web\\WebApplication",
             "id": "web",
             "calls": [
