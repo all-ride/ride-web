@@ -56,7 +56,7 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
     }
 
     /**
-     * Reads the containers from the data source
+     * Sets the container by reading from the data source
      * @return null
      */
     protected function readContainer() {
@@ -83,12 +83,13 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
     }
 
     /**
-     * Reads the aliases from the provided file
+     * Reads the routes from the provided file
      * @param pallo\library\router\RouteContainer $routeContainer
      * @param pallo\library\system\file\File $file
+     * @param string $prefix Path prefix
      * @return null
      */
-    protected function readContainerFromFile(RouteContainer $routeContainer, File $file) {
+    protected function readContainerFromFile(RouteContainer $routeContainer, File $file, $prefix = null) {
         try {
             $content = $file->read();
             $content = $this->parser->parseToPhp($content);
@@ -98,7 +99,7 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
             }
 
             foreach ($content['routes'] as $routeStruct) {
-                $routeContainer->addRoute($this->parseRouteFromStruct($routeStruct));
+                $this->readContainerFromRouteStruct($routeContainer, $routeStruct, $prefix);
             }
         } catch (Exception $exception) {
             throw new DependencyException('Could not read routes from ' . $file, 0, $exception);
@@ -106,11 +107,14 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
     }
 
     /**
-     * Parses a route object from a route struct
+     * Adds the routes from the provided route struct to the provided container
+     * @param pallo\library\router\RouteContainer $routeContainer Container of
+     * the read routes
      * @param array $routeStruct Structure with the route data
-     * @return pallo\library\router\Route
+     * @param string $prefix Path prefix
+     * @return null
      */
-    protected function parseRouteFromStruct(array $routeStruct) {
+    protected function readContainerFromRouteStruct(RouteContainer $routeContainer, array $routeStruct, $prefix) {
         if (!isset($routeStruct['path'])) {
             throw new RouterException('Could not parse route structure: no path set');
         }
@@ -118,64 +122,75 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
         $path = $this->processParameter($routeStruct['path']);
         unset($routeStruct['path']);
 
-        if (isset($routeStruct['function'])) {
-            $callback = $this->processParameter($routeStruct['function']);
-            unset($routeStruct['function']);
-        } elseif (isset($routeStruct['controller'])) {
-            $controller = $this->processParameter($routeStruct['controller']);
-            unset($routeStruct['controller']);
-
-            if (isset($routeStruct['action'])) {
-                $action = $this->processParameter($routeStruct['action']);
-                unset($routeStruct['action']);
-            } else {
-                $action = 'indexAction';
+        if (isset($routeStruct['file'])) {
+            $file = $this->fileBrowser->getFile($routeStruct['file']);
+            if (!$file) {
+                throw new RouterException('Could not parse route structure: ' . $routeStruct['file'] . ' not found');
             }
 
-            $callback = array($controller, $action);
-        }
+            $this->readContainerFromFile($routeContainer, $file, rtrim($path, '/'));
 
-        if (isset($routeStruct['id'])) {
-            $id = $this->processParameter($routeStruct['id']);
-            unset($routeStruct['id']);
+            unset($routeStruct['file']);
         } else {
-            $id = null;
-        }
+            if (isset($routeStruct['function'])) {
+                $callback = $this->processParameter($routeStruct['function']);
+                unset($routeStruct['function']);
+            } elseif (isset($routeStruct['controller'])) {
+                $controller = $this->processParameter($routeStruct['controller']);
+                unset($routeStruct['controller']);
 
-        if (isset($routeStruct['methods'])) {
-            $allowedMethods = $routeStruct['methods'];
-            unset($routeStruct['methods']);
-        } else {
-            $allowedMethods = null;
-        }
+                if (isset($routeStruct['action'])) {
+                    $action = $this->processParameter($routeStruct['action']);
+                    unset($routeStruct['action']);
+                } else {
+                    $action = 'indexAction';
+                }
 
-        $route = new Route($path, $callback, $id, $allowedMethods);
+                $callback = array($controller, $action);
+            }
 
-        if (isset($routeStruct['dynamic'])) {
-            $route->setIsDynamic($this->processParameter($routeStruct['dynamic']));
-            unset($routeStruct['dynamic']);
-        }
+            if (isset($routeStruct['id'])) {
+                $id = $this->processParameter($routeStruct['id']);
+                unset($routeStruct['id']);
+            } else {
+                $id = null;
+            }
 
-        if (isset($routeStruct['locale'])) {
-            $route->setLocale($this->processParameter($routeStruct['locale']));
-            unset($routeStruct['locale']);
-        }
+            if (isset($routeStruct['methods'])) {
+                $allowedMethods = $routeStruct['methods'];
+                unset($routeStruct['methods']);
+            } else {
+                $allowedMethods = null;
+            }
 
-        if (isset($routeStruct['base'])) {
-            $route->setBaseUrl($this->processParameter($routeStruct['base']));
-            unset($routeStruct['base']);
-        }
+            $route = new Route($prefix . $path, $callback, $id, $allowedMethods);
 
-        $arguments = $this->parseArgumentsFromRouteStruct($routeStruct);
-        if ($arguments) {
-            $route->setPredefinedArguments($arguments);
+            if (isset($routeStruct['dynamic'])) {
+                $route->setIsDynamic($this->processParameter($routeStruct['dynamic']));
+                unset($routeStruct['dynamic']);
+            }
+
+            if (isset($routeStruct['locale'])) {
+                $route->setLocale($this->processParameter($routeStruct['locale']));
+                unset($routeStruct['locale']);
+            }
+
+            if (isset($routeStruct['base'])) {
+                $route->setBaseUrl($this->processParameter($routeStruct['base']));
+                unset($routeStruct['base']);
+            }
+
+            $arguments = $this->parseArgumentsFromRouteStruct($routeStruct);
+            if ($arguments) {
+                $route->setPredefinedArguments($arguments);
+            }
+
+            $routeContainer->addRoute($route);
         }
 
         if ($routeStruct) {
             throw new RouterException('Could not add route for ' . $path . ': provided properties are invalid (' . implode(', ', array_keys($routeStruct)) . ')');
         }
-
-        return $route;
     }
 
     /**
