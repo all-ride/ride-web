@@ -223,6 +223,42 @@ class WebApplication implements Application {
     }
 
     /**
+     * Creates a request
+     * @param string $path Path for the request
+     * @return pallo\library\http\Request
+     */
+    public function createRequest($path = null, $method = null) {
+        if (!$path) {
+            $request = $this->httpFactory->createRequestFromServer();
+        } else {
+            if ($this->request) {
+                if (!$method) {
+                    $method = $this->request->getMethod();
+                }
+                $protocol = $this->request->getProtocol();
+                $headers = $this->request->getHeaders();
+                $body = $this->request->getBodyParameters();
+                $isSecure = $this->request->isSecure();
+
+                $path = str_replace($this->request->getServerUrl(), '', $this->request->getBaseUrl()) . $path;
+            } else {
+                $protocol = null;
+                $headers = null;
+                $body = null;
+                $isSecure = null;
+            }
+
+            $request = $this->httpFactory->createRequest($path, $method, $protocol, $headers, $body);
+        }
+
+        if ($this->dependencyInjector && method_exists($request, 'setDependencyInjector')) {
+            $request->setDependencyInjector($this->dependencyInjector);
+        }
+
+        return $request;
+    }
+
+    /**
      * Gets the response
      * @return pallo\library\mvc\Response
      */
@@ -298,11 +334,7 @@ class WebApplication implements Application {
         }
 
         if (!$this->request) {
-            $this->request = $this->httpFactory->createRequestFromServer();
-        }
-
-        if ($this->dependencyInjector && method_exists($this->request, 'setDependencyInjector')) {
-            $this->request->setDependencyInjector($this->dependencyInjector);
+            $this->request = $this->createRequest();
         }
 
         // keep the initial request
