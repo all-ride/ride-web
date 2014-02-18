@@ -53,7 +53,7 @@ abstract class AbstractController extends LibAbstractController {
      * @param string $routeId The id of the route
      * @param array $arguments Path arguments for the route
      * @return string
-     * @throws zibo\library\router\exception\RouterException If the route is
+     * @throws pallo\library\router\exception\RouterException If the route is
      * not found
      */
     protected function getUrl($routeId, array $arguments = null) {
