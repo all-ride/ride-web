@@ -1,12 +1,12 @@
 <?php
 
-namespace pallo\web\mvc\dispatcher;
+namespace ride\web\mvc\dispatcher;
 
-use pallo\application\system\System;
+use ride\application\system\System;
 
-use pallo\library\decorator\Decorator;
-use pallo\library\mvc\dispatcher\GenericDispatcher;
-use pallo\library\log\Log;
+use ride\library\decorator\Decorator;
+use ride\library\mvc\dispatcher\GenericDispatcher;
+use ride\library\log\Log;
 
 /**
  * Dispatcher with log support
@@ -15,19 +15,19 @@ class LoggedDispatcher extends GenericDispatcher {
 
     /**
      * Instance of the log
-     * @var pallo\library\log\Log
+     * @var ride\library\log\Log
      */
     protected $log;
 
     /**
      * Decorator for logged values
-     * @var pallo\library\decorator\Decorator
+     * @var ride\library\decorator\Decorator
      */
     protected $valueDecorator;
 
     /**
      * Sets the log
-     * @param pallo\library\log\Log $log
+     * @param ride\library\log\Log $log
      * @return null
      */
     public function setLog(Log $log) {
@@ -36,7 +36,7 @@ class LoggedDispatcher extends GenericDispatcher {
 
     /**
      * Gets the dependency injector
-     * @return pallo\library\log\Log|null
+     * @return ride\library\log\Log|null
      */
     public function getLog(Log $log) {
         return $this->log;
@@ -44,7 +44,7 @@ class LoggedDispatcher extends GenericDispatcher {
 
     /**
      * Sets the value decorator for logged values
-     * @param pallo\library\decorator\Decorator
+     * @param ride\library\decorator\Decorator
      * @return null
      */
     public function setValueDecorator(Decorator $valueDecorator) {
@@ -53,7 +53,7 @@ class LoggedDispatcher extends GenericDispatcher {
 
     /**
      * Gets the value decorator for logged values
-     * @return pallo\library\decorator\Decorator
+     * @return ride\library\decorator\Decorator
      */
     public function getValueDecorator() {
         return $this->valueDecorator;

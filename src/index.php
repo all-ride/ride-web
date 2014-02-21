@@ -17,13 +17,13 @@ try {
     }
 
     // service the web
-    $system = new pallo\application\system\System($parameters);
+    $system = new ride\application\system\System($parameters);
     $system->service('web');
 } catch (Exception $exception) {
     // error occured
     $protocol = isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0';
     header($protocol . ' 500 Internal Server Error');
 
-    $view = new pallo\web\mvc\view\ExceptionView($exception);
+    $view = new ride\web\mvc\view\ExceptionView($exception);
     $view->render(false);
 }

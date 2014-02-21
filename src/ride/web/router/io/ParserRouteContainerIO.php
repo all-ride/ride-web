@@ -1,15 +1,15 @@
 <?php
 
-namespace pallo\web\router\io;
+namespace ride\web\router\io;
 
-use pallo\library\config\io\AbstractIO;
-use pallo\library\config\parser\Parser;
-use pallo\library\dependency\DependencyCallArgument;
-use pallo\library\router\exception\RouterException;
-use pallo\library\router\RouteContainer;
-use pallo\library\router\Route;
-use pallo\library\system\file\browser\FileBrowser;
-use pallo\library\system\file\File;
+use ride\library\config\io\AbstractIO;
+use ride\library\config\parser\Parser;
+use ride\library\dependency\DependencyCallArgument;
+use ride\library\router\exception\RouterException;
+use ride\library\router\RouteContainer;
+use ride\library\router\Route;
+use ride\library\system\file\browser\FileBrowser;
+use ride\library\system\file\File;
 
 /**
  * XML implementation of the RouterIO
@@ -18,20 +18,20 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
 
     /**
      * Parser for the configuration files
-     * @var pallo\library\config\parser\Parser
+     * @var ride\library\config\parser\Parser
      */
     protected $parser;
 
     /**
      * Loaded route container
-     * @var pallo\library\router\RouteContainer
+     * @var ride\library\router\RouteContainer
      */
     protected $routeContainer;
 
     /**
      * Constructs a new route container IO
-     * @param pallo\library\system\file\browser\FileBrowser $fileBrowser
-     * @param pallo\library\config\parser\Parser $parser
+     * @param ride\library\system\file\browser\FileBrowser $fileBrowser
+     * @param ride\library\config\parser\Parser $parser
      * @param string $file
      * @param string $path
      * @return null
@@ -45,7 +45,7 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
 
     /**
      * Gets the route container
-     * @return pallo\library\router\RouteContainer
+     * @return ride\library\router\RouteContainer
      */
     public function getRouteContainer() {
         if (!$this->routeContainer) {
@@ -84,8 +84,8 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
 
     /**
      * Reads the routes from the provided file
-     * @param pallo\library\router\RouteContainer $routeContainer
-     * @param pallo\library\system\file\File $file
+     * @param ride\library\router\RouteContainer $routeContainer
+     * @param ride\library\system\file\File $file
      * @param string $prefix Path prefix
      * @return null
      */
@@ -108,7 +108,7 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
 
     /**
      * Adds the routes from the provided route struct to the provided container
-     * @param pallo\library\router\RouteContainer $routeContainer Container of
+     * @param ride\library\router\RouteContainer $routeContainer Container of
      * the read routes
      * @param array $routeStruct Structure with the route data
      * @param string $prefix Path prefix
@@ -235,7 +235,7 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
 
     /**
      * Sets the route container to the data source
-     * @param pallo\library\router\RouteContainer $container The container to write
+     * @param ride\library\router\RouteContainer $container The container to write
      * @return null
      */
     public function setRouteContainer(RouteContainer $container) {
@@ -291,9 +291,9 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
 
     /**
      * Parses a route into a structure
-     * @param pallo\library\router\Route $route
+     * @param ride\library\router\Route $route
      * @return array
-     * @throws pallo\library\router\exception\RouterException when an invalid
+     * @throws ride\library\router\exception\RouterException when an invalid
      * argument is set to the route
      */
     protected function parseStructFromRoute(Route $route) {

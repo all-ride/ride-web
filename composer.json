@@ -1,6 +1,6 @@
 {
-    "name": "pallo/web",
-    "description": "Web interface for a Pallo application",
+    "name": "ride/web",
+    "description": "Web interface for a Ride application",
     "license": "MIT",
     "version": "0.3.1",
     "authors": [
@@ -10,21 +10,21 @@
         }
     ],
     "require": {
-        "pallo/app": ">=0.4.0",
-        "pallo/lib-common": ">=0.3.0",
-        "pallo/lib-config": ">=0.2.0",
-        "pallo/lib-dependency": ">=0.4.0",
-        "pallo/lib-event": ">=0.3.0",
-        "pallo/lib-http": ">=0.2.0",
-        "pallo/lib-http-client": ">=0.1.0",
-        "pallo/lib-log": ">=0.2.0",
-        "pallo/lib-mvc": ">=0.2.0",
-        "pallo/lib-router": ">=0.1.0",
-        "pallo/lib-system": ">=0.2.1"
+        "ride/app": ">=0.4.0",
+        "ride/lib-common": ">=0.3.0",
+        "ride/lib-config": ">=0.2.0",
+        "ride/lib-dependency": ">=0.4.0",
+        "ride/lib-event": ">=0.3.0",
+        "ride/lib-http": ">=0.2.0",
+        "ride/lib-http-client": ">=0.1.0",
+        "ride/lib-log": ">=0.2.0",
+        "ride/lib-mvc": ">=0.2.0",
+        "ride/lib-router": ">=0.1.0",
+        "ride/lib-system": ">=0.2.1"
     }, 
     "autoload": {
         "psr-0": {
-            "pallo\\web\\": ["src/", "test/src/"]
+            "ride\\web\\": ["src/", "test/src/"]
         }
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace pallo\web\http\session\io;
+namespace ride\web\http\session\io;
 
-use pallo\library\http\exception\HttpException;
-use pallo\library\http\session\io\SessionIO;
-use pallo\library\system\file\File;
+use ride\library\http\exception\HttpException;
+use ride\library\http\session\io\SessionIO;
+use ride\library\system\file\File;
 
 /**
  * File implementation for the session input/output
@@ -13,7 +13,7 @@ class FileSessionIO implements SessionIO {
 
     /**
      * Path to save the sessions to
-     * @var pallo\library\system\file\File
+     * @var ride\library\system\file\File
      */
     protected $path;
 
@@ -25,7 +25,7 @@ class FileSessionIO implements SessionIO {
 
     /**
      * Constructs a new file session IO
-     * @param pallo\library\system\file\File $path Path for the session data
+     * @param ride\library\system\file\File $path Path for the session data
      * @param integer $timeout Timeout in seconds
      * @return null
      */
@@ -36,7 +36,7 @@ class FileSessionIO implements SessionIO {
 
     /**
      * Sets the path for the session data
-     * @param pallo\library\system\file\File $path Path for the session data
+     * @param ride\library\system\file\File $path Path for the session data
      * @return null
      */
     public function setPath(File $path) {
@@ -45,7 +45,7 @@ class FileSessionIO implements SessionIO {
 
     /**
      * Gets the path for the session data
-     * @return pallo\library\system\file\File
+     * @return ride\library\system\file\File
      */
     public function getPath() {
         return $this->path;
@@ -55,7 +55,7 @@ class FileSessionIO implements SessionIO {
      * Sets the timeout of the sessions
      * @param integer $timeout Timeout in seconds
      * @return null
-     * @throws pallo\library\http\exception\HttpException When a invalid
+     * @throws ride\library\http\exception\HttpException When a invalid
      * timeout has been provided
      */
     public function setTimeout($timeout) {

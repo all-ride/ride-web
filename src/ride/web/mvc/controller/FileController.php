@@ -1,14 +1,14 @@
 <?php
 
-namespace pallo\web\mvc\controller;
+namespace ride\web\mvc\controller;
 
-use pallo\library\http\Header;
-use pallo\library\http\Request;
-use pallo\library\http\Response;
-use pallo\library\system\file\browser\FileBrowser;
-use pallo\library\system\file\File;
+use ride\library\http\Header;
+use ride\library\http\Request;
+use ride\library\http\Response;
+use ride\library\system\file\browser\FileBrowser;
+use ride\library\system\file\File;
 
-use pallo\web\mvc\view\FileView;
+use ride\web\mvc\view\FileView;
 
 /**
  * Controller to host files from a directory
@@ -17,8 +17,8 @@ class FileController extends AbstractController {
 
     /**
      * Constructs a new file controller
-     * @param pallo\library\system\file\browser\FileBrowser $fileBrowser
-     * @param pallo\library\system\file\File $path
+     * @param ride\library\system\file\browser\FileBrowser $fileBrowser
+     * @param ride\library\system\file\File $path
      * @return null
      */
     public function __construct(FileBrowser $fileBrowser, File $path) {
@@ -74,7 +74,7 @@ class FileController extends AbstractController {
         }
 
         // set content headers
-        $mimeResolver = $this->dependencyInjector->get('pallo\\web\\mime\\MimeResolver');
+        $mimeResolver = $this->dependencyInjector->get('ride\\web\\mime\\MimeResolver');
         $mime = $mimeResolver->getMimeTypeByExtension($file->getExtension());
 
         $this->response->setHeader(Header::HEADER_CONTENT_TYPE, $mime);
