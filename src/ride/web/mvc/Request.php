@@ -1,10 +1,10 @@
 <?php
 
-namespace pallo\web\mvc;
+namespace ride\web\mvc;
 
-use pallo\library\dependency\DependencyInjector;
-use pallo\library\mvc\exception\MvcException;
-use pallo\library\mvc\Request as LibRequest;
+use ride\library\dependency\DependencyInjector;
+use ride\library\mvc\exception\MvcException;
+use ride\library\mvc\Request as LibRequest;
 
 /**
  * A extension of the MVC request for automatic session handling
@@ -19,7 +19,7 @@ class Request extends LibRequest {
 
     /**
      * Instance of the dependency injector
-     * @var pallo\library\dependency\DependencyInjector
+     * @var ride\library\dependency\DependencyInjector
      */
     protected $dependencyInjector;
 
@@ -71,7 +71,7 @@ class Request extends LibRequest {
 
     /**
      * Gets the session container
-     * @return pallo\library\http\session\Session
+     * @return ride\library\http\session\Session
      */
     public function getSession() {
         if ($this->session) {
@@ -93,7 +93,7 @@ class Request extends LibRequest {
             throw new MvcException('Could not get the session: dependency injector not set to the request');
         }
 
-        $this->session = $this->dependencyInjector->get('pallo\\library\\http\\session\\Session');
+        $this->session = $this->dependencyInjector->get('ride\\library\\http\\session\\Session');
         $this->session->read($sessionId);
 
         return $this->session;

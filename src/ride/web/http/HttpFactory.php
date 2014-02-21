@@ -1,11 +1,11 @@
 <?php
 
-namespace pallo\web\http;
+namespace ride\web\http;
 
-use pallo\library\http\exception\HttpException;
-use pallo\library\http\HttpFactory as LibHttpFactory;
+use ride\library\http\exception\HttpException;
+use ride\library\http\HttpFactory as LibHttpFactory;
 
-use pallo\web\mvc\Request;
+use ride\web\mvc\Request;
 
 /**
  * Factory for HTTP objects

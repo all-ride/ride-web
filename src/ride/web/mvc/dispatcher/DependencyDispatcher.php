@@ -1,12 +1,12 @@
 <?php
 
-namespace pallo\web\mvc\dispatcher;
+namespace ride\web\mvc\dispatcher;
 
-use pallo\library\config\Config;
-use pallo\library\dependency\DependencyInjector;
-use pallo\library\reflection\Callback;
+use ride\library\config\Config;
+use ride\library\dependency\DependencyInjector;
+use ride\library\reflection\Callback;
 
-use pallo\web\mvc\controller\AbstractController;
+use ride\web\mvc\controller\AbstractController;
 
 /**
  * Dispatcher with dependency injection and log support
@@ -21,19 +21,19 @@ class DependencyDispatcher extends LoggedDispatcher {
 
     /**
      * Instance of the configuration
-     * @var pallo\library\config\Config
+     * @var ride\library\config\Config
      */
     protected $config;
 
     /**
      * Instance of the dependency injector
-     * @var pallo\library\dependency\DependencyInjector
+     * @var ride\library\dependency\DependencyInjector
      */
     protected $dependencyInjector;
 
     /**
      * Sets the configuration
-     * @param pallo\library\config\Config $config
+     * @param ride\library\config\Config $config
      * @return null
      */
     public function setConfig(Config $config) {
@@ -42,7 +42,7 @@ class DependencyDispatcher extends LoggedDispatcher {
 
     /**
      * Sets the dependency injector
-     * @param pallo\library\dependency\DependencyInjector $dependencyInjector
+     * @param ride\library\dependency\DependencyInjector $dependencyInjector
      * @return null
      */
     public function setDependencyInjector(DependencyInjector $dependencyInjector) {

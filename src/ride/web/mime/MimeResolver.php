@@ -1,6 +1,6 @@
 <?php
 
-namespace pallo\web\mime;
+namespace ride\web\mime;
 
 /**
  * Interface to resolve the MIME types

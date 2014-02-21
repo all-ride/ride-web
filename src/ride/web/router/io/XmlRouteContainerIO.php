@@ -1,14 +1,14 @@
 <?php
 
-namespace pallo\web\router\io;
+namespace ride\web\router\io;
 
-use pallo\application\dependency\io\XmlDependencyIO;
+use ride\application\dependency\io\XmlDependencyIO;
 
-use pallo\library\dependency\DependencyCallArgument;
-use pallo\library\router\exception\RouterException;
-use pallo\library\router\RouteContainer;
-use pallo\library\router\Route;
-use pallo\library\system\file\File;
+use ride\library\dependency\DependencyCallArgument;
+use ride\library\router\exception\RouterException;
+use ride\library\router\RouteContainer;
+use ride\library\router\Route;
+use ride\library\system\file\File;
 
 use \DOMDocument;
 use \DOMElement;
@@ -93,13 +93,13 @@ class XmlRouteContainerIO implements RouteContainerIO {
 
     /**
      * Loaded route container
-     * @var pallo\library\router\RouteContainer
+     * @var ride\library\router\RouteContainer
      */
     protected $routeContainer;
 
     /**
      * Constructs a new XML dependency IO
-     * @param pallo\core\environment\filebrowser\FileBrowser $fileBrowser
+     * @param ride\core\environment\filebrowser\FileBrowser $fileBrowser
      * @param string $environment
      * @return null
      */
@@ -109,7 +109,7 @@ class XmlRouteContainerIO implements RouteContainerIO {
 
     /**
      * Gets the route container
-     * @return pallo\library\router\RouteContainer
+     * @return ride\library\router\RouteContainer
      */
     public function getRouteContainer() {
         if (!$this->routeContainer) {
@@ -148,7 +148,7 @@ class XmlRouteContainerIO implements RouteContainerIO {
 
     /**
      * Reads the aliases from the provided file
-     * @param pallo\library\filesystem\File $file
+     * @param ride\library\filesystem\File $file
      * @return null
      */
     protected function readContainerFromFile(RouteContainer $routeContainer, File $file) {
@@ -160,7 +160,7 @@ class XmlRouteContainerIO implements RouteContainerIO {
 
     /**
      * Gets the routes object from an XML routes element
-     * @param pallo\library\filesystem\File $file the file which is being
+     * @param ride\library\filesystem\File $file the file which is being
      * read
      * @param DomElement $routesElement the element which contains route
      * elements
@@ -218,7 +218,7 @@ class XmlRouteContainerIO implements RouteContainerIO {
 
     /**
      * Gets the routes object from an XML routes element
-     * @param pallo\library\filesystem\File $file the file which is being
+     * @param ride\library\filesystem\File $file the file which is being
      * read
      * @param DomElement $routesElement the element which contains route
      * elements
@@ -249,13 +249,13 @@ class XmlRouteContainerIO implements RouteContainerIO {
 
     /**
      * Gets the value of an attribute from the provided XML element
-     * @param pallo\library\filesystem\File $file the file which is being read
+     * @param ride\library\filesystem\File $file the file which is being read
      * @param DomElement $element the element from which the attribute needs to
      * be retrieved
      * @param string $name name of the attribute
      * @param boolean $required flag to see if the value is required or not
      * @return string
-     * @throws pallo\library\router\exception\RouterException when the attribute
+     * @throws ride\library\router\exception\RouterException when the attribute
      * is required but not set or empty
      */
     private function getAttribute(File $file, DOMElement $element, $name, $required = true) {
@@ -270,7 +270,7 @@ class XmlRouteContainerIO implements RouteContainerIO {
 
     /**
      * Sets the route container to the data source
-     * @param pallo\library\router\RouteContainer $container The container to write
+     * @param ride\library\router\RouteContainer $container The container to write
      * @return null
      */
     public function setRouteContainer(RouteContainer $container) {

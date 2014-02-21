@@ -1,8 +1,8 @@
 <?php
 
-namespace pallo\web\mvc\view;
+namespace ride\web\mvc\view;
 
-use pallo\library\mvc\view\View;
+use ride\library\mvc\view\View;
 
 /**
  * View for a JSON response

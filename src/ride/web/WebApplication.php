@@ -1,26 +1,26 @@
 <?php
 
-namespace pallo\web;
+namespace ride\web;
 
-use pallo\application\system\System;
-use pallo\application\Application;
+use ride\application\system\System;
+use ride\application\Application;
 
-use pallo\library\dependency\DependencyInjector;
-use pallo\library\event\EventManager;
-use pallo\library\http\Cookie;
-use pallo\library\http\Header;
-use pallo\library\http\HttpFactory;
-use pallo\library\log\Log;
-use pallo\library\mvc\dispatcher\Dispatcher;
-use pallo\library\mvc\Request;
-use pallo\library\mvc\Response;
-use pallo\library\router\Router;
-use pallo\library\router\Route;
+use ride\library\dependency\DependencyInjector;
+use ride\library\event\EventManager;
+use ride\library\http\Cookie;
+use ride\library\http\Header;
+use ride\library\http\HttpFactory;
+use ride\library\log\Log;
+use ride\library\mvc\dispatcher\Dispatcher;
+use ride\library\mvc\Request;
+use ride\library\mvc\Response;
+use ride\library\router\Router;
+use ride\library\router\Route;
 
 use \Exception;
 
 /**
- * Pallo web application
+ * Ride web application
  */
 class WebApplication implements Application {
 
@@ -98,37 +98,37 @@ class WebApplication implements Application {
 
     /**
      * Instance of the event manager
-     * @var pallo\library\event\EventManager
+     * @var ride\library\event\EventManager
      */
     protected $eventManager;
 
     /**
      * HTTP factory to create request and response objects
-     * @var pallo\library\http\HttpFactory
+     * @var ride\library\http\HttpFactory
      */
     protected $httpFactory;
 
     /**
      * Router to obtain the Route object
-     * @var pallo\library\router\Router
+     * @var ride\library\router\Router
      */
     protected $router;
 
     /**
      * Dispatcher of the route callback
-     * @var pallo\library\mvc\dispatcher\Dispatcher
+     * @var ride\library\mvc\dispatcher\Dispatcher
      */
     protected $dispatcher;
 
     /**
      * Data container of the request
-     * @var pallo\library\mvc\Request
+     * @var ride\library\mvc\Request
      */
     protected $request;
 
     /**
      * Data container of the response
-     * @var pallo\library\mvc\Response
+     * @var ride\library\mvc\Response
      */
     protected $response;
 
@@ -146,7 +146,7 @@ class WebApplication implements Application {
 
     /**
      * Instance of the dependency injector
-     * @var pallo\library\dependency\DependencyInjector
+     * @var ride\library\dependency\DependencyInjector
      */
     protected $dependencyInjector;
 
@@ -181,7 +181,7 @@ class WebApplication implements Application {
 
     /**
      * Sets the Log
-     * @param pallo\library\log\Log $log
+     * @param ride\library\log\Log $log
      * @return null
      */
     public function setLog(Log $log) {
@@ -190,7 +190,7 @@ class WebApplication implements Application {
 
     /**
      * Gets the Log
-     * @return pallo\library\log\Log
+     * @return ride\library\log\Log
      */
     public function getLog() {
         return $this->log;
@@ -207,7 +207,7 @@ class WebApplication implements Application {
 
     /**
      * Sets the request
-     * @param pallo\library\mvc\Request $request
+     * @param ride\library\mvc\Request $request
      * @return null
      */
     public function setRequest(Request $request = null) {
@@ -216,7 +216,7 @@ class WebApplication implements Application {
 
     /**
      * Gets the request
-     * @return pallo\library\mvc\Request
+     * @return ride\library\mvc\Request
      */
     public function getRequest() {
         return $this->request;
@@ -225,7 +225,7 @@ class WebApplication implements Application {
     /**
      * Creates a request
      * @param string $path Path for the request
-     * @return pallo\library\http\Request
+     * @return ride\library\http\Request
      */
     public function createRequest($path = null, $method = null) {
         if (!$path) {
@@ -260,7 +260,7 @@ class WebApplication implements Application {
 
     /**
      * Gets the response
-     * @return pallo\library\mvc\Response
+     * @return ride\library\mvc\Response
      */
     public function getResponse() {
         return $this->response;
@@ -268,7 +268,7 @@ class WebApplication implements Application {
 
     /**
      * Sets the router
-     * @param pallo\library\router\Router $router
+     * @param ride\library\router\Router $router
      * @return null
      */
     public function setRouter(Router $router) {
@@ -277,7 +277,7 @@ class WebApplication implements Application {
 
     /**
      * Gets the router
-     * @return pallo\library\router\Router
+     * @return ride\library\router\Router
      */
     public function getRouter() {
         return $this->router;
@@ -303,7 +303,7 @@ class WebApplication implements Application {
 
     /**
      * Sets the dispatcher
-     * @param pallo\library\mvc\dispatcher\Dispatcher $dispatcher
+     * @param ride\library\mvc\dispatcher\Dispatcher $dispatcher
      * @return null
      */
     public function setDispatcher(Dispatcher $dispatcher) {
@@ -312,7 +312,7 @@ class WebApplication implements Application {
 
     /**
      * Gets the dispatcher
-     * @return pallo\library\mvc\dispatcher\Dispatcher
+     * @return ride\library\mvc\dispatcher\Dispatcher
      */
     public function getDispatcher() {
         return $this->dispatcher;
@@ -358,8 +358,8 @@ class WebApplication implements Application {
         $this->response = $this->httpFactory->createResponse();
 
         if ($this->dependencyInjector) {
-            $this->dependencyInjector->setInstance($this->request, array('pallo\\library\\http\\Request', 'pallo\\library\\mvc\\Request'));
-            $this->dependencyInjector->setInstance($this->request, array('pallo\\library\\httþ\\Response', 'pallo\\library\\mvc\\Response'));
+            $this->dependencyInjector->setInstance($this->request, array('ride\\library\\http\\Request', 'ride\\library\\mvc\\Request'));
+            $this->dependencyInjector->setInstance($this->request, array('ride\\library\\httþ\\Response', 'ride\\library\\mvc\\Response'));
         }
 
         try {
@@ -373,14 +373,14 @@ class WebApplication implements Application {
                 if ($this->dependencyInjector && ($method == Request::METHOD_GET || $method == Request::METHOD_HEAD)) {
                     $arguments = ltrim($request->getBasePath(true), '/');
                     if ($arguments) {
-                        $controller = $this->dependencyInjector->get('pallo\\library\\mvc\\controller\\Controller', 'public');
+                        $controller = $this->dependencyInjector->get('ride\\library\\mvc\\controller\\Controller', 'public');
                         $callback = array($controller, 'indexAction');
 
                         $route = new Route('/', $callback);
                         $route->setIsDynamic(true);
                         $route->setArguments(explode('/', $arguments));
                     } else {
-                        $controller = $this->dependencyInjector->get('pallo\\library\\mvc\\controller\\IndexController');
+                        $controller = $this->dependencyInjector->get('ride\\library\\mvc\\controller\\IndexController');
                         $callback = array($controller, 'indexAction');
 
                         $route = new Route('/', $callback);
@@ -407,8 +407,8 @@ class WebApplication implements Application {
         $this->sendResponse();
 
         if ($this->dependencyInjector) {
-            $this->dependencyInjector->unsetInstance(array('pallo\\library\\http\\Request', 'pallo\\library\\mvc\\Request'));
-            $this->dependencyInjector->unsetInstance(array('pallo\\library\\http\\Response', 'pallo\\library\\mvc\\Response'));
+            $this->dependencyInjector->unsetInstance(array('ride\\library\\http\\Request', 'ride\\library\\mvc\\Request'));
+            $this->dependencyInjector->unsetInstance(array('ride\\library\\http\\Response', 'ride\\library\\mvc\\Response'));
         }
 
         $this->request = null;
@@ -505,7 +505,7 @@ class WebApplication implements Application {
             $chainedRequest = $dispatcher->dispatch($this->request, $this->response);
 
             if ($chainedRequest && !$chainedRequest instanceof Request) {
-                throw new Exception('Action returned a invalid value, return nothing or a new pallo\\library\\mvc\\Request object for request chaining.');
+                throw new Exception('Action returned a invalid value, return nothing or a new ride\\library\\mvc\\Request object for request chaining.');
             }
 
             $this->setRequest($chainedRequest);

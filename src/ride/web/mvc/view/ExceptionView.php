@@ -1,9 +1,9 @@
 <?php
 
-namespace pallo\web\mvc\view;
+namespace ride\web\mvc\view;
 
-use pallo\library\mvc\view\View;
-use pallo\library\String;
+use ride\library\mvc\view\View;
+use ride\library\String;
 
 use \Exception;
 

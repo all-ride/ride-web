@@ -1,8 +1,8 @@
 {
     "dependencies": [
         {
-            "interfaces": "pallo\\library\\http\\HttpFactory",
-            "class": "pallo\\web\\http\\HttpFactory",
+            "interfaces": "ride\\library\\http\\HttpFactory",
+            "class": "ride\\web\\http\\HttpFactory",
             "calls": [
                 {
                     "method": "setRequestClass",
@@ -12,7 +12,7 @@
                             "type": "parameter",
                             "properties": {
                                 "key": "system.class.request",
-                                "default": "pallo\\web\\mvc\\Request"
+                                "default": "ride\\web\\mvc\\Request"
                             }
                         }
                     ]
@@ -25,7 +25,7 @@
                             "type": "parameter",
                             "properties": {
                                 "key": "system.class.response",
-                                "default": "pallo\\library\\mvc\\Response"
+                                "default": "ride\\library\\mvc\\Response"
                             }
                         }
                     ]
@@ -46,8 +46,8 @@
             ]
         },
         {
-            "interfaces": ["pallo\\library\\http\\Request", "pallo\\library\\mvc\\Request"],
-            "class": "pallo\\library\\mvc\\Request",
+            "interfaces": ["ride\\library\\http\\Request", "ride\\library\\mvc\\Request"],
+            "class": "ride\\library\\mvc\\Request",
             "calls": [
                {
                    "method": "__construct",
@@ -64,12 +64,12 @@
             ]
         },        
         {
-            "interfaces": ["pallo\\library\\http\\client\\Client"],
-            "class": "pallo\\library\\http\\client\\CurlClient",
+            "interfaces": ["ride\\library\\http\\client\\Client"],
+            "class": "ride\\library\\http\\client\\CurlClient",
             "id": "curl"
         },        
         {
-            "class": "pallo\\library\\system\\file\\File",
+            "class": "ride\\library\\system\\file\\File",
             "id": "session",
             "calls": [
                 {
@@ -87,8 +87,8 @@
             ]
         },
         {
-            "interfaces": "pallo\\library\\http\\session\\io\\SessionIO",
-            "class": "pallo\\web\\http\\session\\io\\FileSessionIO",
+            "interfaces": "ride\\library\\http\\session\\io\\SessionIO",
+            "class": "ride\\web\\http\\session\\io\\FileSessionIO",
             "id": "file",
             "calls": [
                 {
@@ -98,7 +98,7 @@
                             "name": "path",
                             "type": "dependency",
                             "properties": {
-                                "interface": "pallo\\library\\system\\file\\File",
+                                "interface": "ride\\library\\system\\file\\File",
                                 "id": "session"
                             }
                         },
@@ -115,8 +115,8 @@
             ]
         },
         {
-            "interfaces": "pallo\\web\\router\\io\\RouteContainerIO", 
-            "class": "pallo\\web\\router\\io\\ParserRouteContainerIO",
+            "interfaces": "ride\\web\\router\\io\\RouteContainerIO", 
+            "class": "ride\\web\\router\\io\\ParserRouteContainerIO",
             "id": "web",
             "calls": [
                 {
@@ -126,7 +126,7 @@
                             "name": "parser",
                             "type": "dependency",
                             "properties": {
-                                "interface": "pallo\\library\\config\\parser\\Parser",
+                                "interface": "ride\\library\\config\\parser\\Parser",
                                 "id": "json"
                             }
                         },
@@ -151,8 +151,8 @@
             ]
         },
         {
-            "interfaces": "pallo\\library\\router\\Router",
-            "class": "pallo\\library\\router\\GenericRouter",
+            "interfaces": "ride\\library\\router\\Router",
+            "class": "ride\\library\\router\\GenericRouter",
             "id": "web",
             "calls": [
                 {
@@ -162,7 +162,7 @@
                             "name": "routeContainer",
                             "type": "call",
                             "properties": {
-                                "interface": "pallo\\web\\router\\io\\RouteContainerIO",
+                                "interface": "ride\\web\\router\\io\\RouteContainerIO",
                                 "method": "getRouteContainer"
                             }
                         }
@@ -183,7 +183,7 @@
             ]
         },
         {
-            "class": "pallo\\library\\system\\file\\File",
+            "class": "ride\\library\\system\\file\\File",
             "id": "public",
             "calls": [
                 {
@@ -193,7 +193,7 @@
                             "name": "path",
                             "type": "call",
                             "properties": {
-                                "interface": "pallo\\library\\system\\file\\browser\\FileBrowser",
+                                "interface": "ride\\library\\system\\file\\browser\\FileBrowser",
                                 "method": "getPublicPath"
                             }
                         }
@@ -202,8 +202,8 @@
             ]
         },            
         {
-            "interfaces": "pallo\\library\\mvc\\controller\\Controller",
-            "class": "pallo\\web\\mvc\\controller\\FileController",
+            "interfaces": "ride\\library\\mvc\\controller\\Controller",
+            "class": "ride\\web\\mvc\\controller\\FileController",
             "id": "public",
             "calls": [
                 {
@@ -213,7 +213,7 @@
                             "name": "path",
                             "type": "dependency",
                             "properties": {
-                                "interface": "pallo\\library\\system\\file\\File",
+                                "interface": "ride\\library\\system\\file\\File",
                                 "id": "public"
                             }
                         }
@@ -222,8 +222,8 @@
             ]
         },
         {
-            "interfaces": "pallo\\library\\mvc\\dispatcher\\Dispatcher",
-            "class": "pallo\\web\\mvc\\dispatcher\\DependencyDispatcher",
+            "interfaces": "ride\\library\\mvc\\dispatcher\\Dispatcher",
+            "class": "ride\\web\\mvc\\dispatcher\\DependencyDispatcher",
             "id": "dependency",
             "calls": [
                 "setConfig", 
@@ -236,7 +236,7 @@
                             "name": "valueDecorator",
                             "type": "dependency",
                             "properties": {
-                                "interface": "pallo\\library\\decorator\\Decorator",
+                                "interface": "ride\\library\\decorator\\Decorator",
                                 "id": "variable"
                             }
                         }
@@ -245,8 +245,8 @@
             ]
         },
         {
-            "interfaces": ["pallo\\application\\Application", "pallo\\web\\WebApplication"],
-            "class": "pallo\\web\\WebApplication",
+            "interfaces": ["ride\\application\\Application", "ride\\web\\WebApplication"],
+            "class": "ride\\web\\WebApplication",
             "id": "web",
             "calls": [
                 "setDependencyInjector",
@@ -258,7 +258,7 @@
                             "name": "sessionTimeout",
                             "type": "call",
                             "properties": {
-                                "interface": "pallo\\library\\http\\session\\io\\SessionIO",
+                                "interface": "ride\\library\\http\\session\\io\\SessionIO",
                                 "method": "getTimeout"
                             }
                         }
@@ -267,8 +267,8 @@
             ]
         },
         {
-            "interfaces": "pallo\\web\\mime\\MimeResolver",
-            "class": "pallo\\web\\mime\\ConfigMimeResolver",
+            "interfaces": "ride\\web\\mime\\MimeResolver",
+            "class": "ride\\web\\mime\\ConfigMimeResolver",
             "id": "config"
         }
     ]

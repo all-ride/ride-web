@@ -1,8 +1,8 @@
 <?php
 
-namespace pallo\web\mime;
+namespace ride\web\mime;
 
-use pallo\library\config\Config;
+use ride\library\config\Config;
 
 /**
  * MIME resolver through the configuration
@@ -23,13 +23,13 @@ class ConfigMimeResolver implements MimeResolver {
 
     /**
      * Instance of the configuration
-     * @var pallo\library\config\Config
+     * @var ride\library\config\Config
      */
     protected $config;
 
     /**
      * Constructs a new MIME
-     * @param pallo\library\config\Config $config
+     * @param ride\library\config\Config $config
      * @return null
      */
     public function __construct(Config $config) {

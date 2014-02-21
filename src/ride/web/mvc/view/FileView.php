@@ -1,10 +1,10 @@
 <?php
 
-namespace pallo\web\mvc\view;
+namespace ride\web\mvc\view;
 
-use pallo\library\mvc\exception\MvcException;
-use pallo\library\mvc\view\View;
-use pallo\library\system\file\File;
+use ride\library\mvc\exception\MvcException;
+use ride\library\mvc\view\View;
+use ride\library\system\file\File;
 
 /**
  * View to render the contents of a file
@@ -26,7 +26,7 @@ class FileView implements View {
 
     /**
      * Constructs a new file view
-     * @param pallo\library\system\file\File $file File to render
+     * @param ride\library\system\file\File $file File to render
      * @return null
      */
     public function __construct(File $file) {
@@ -40,7 +40,7 @@ class FileView implements View {
 
     /**
      * Gets the file of this view
-     * @return pallo\library\system\file\File
+     * @return ride\library\system\file\File
      */
     public function getFile() {
         return $this->file;
