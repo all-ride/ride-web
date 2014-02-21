@@ -1,3 +1,3 @@
-# Pallo: Web
+# Ride: Web
 
-This module adds a web interface to your Pallo application.
+This module adds a web interface to your Ride application.
