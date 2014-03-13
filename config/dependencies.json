@@ -147,6 +147,19 @@
                         }
                     ]
                 },
+                {
+                    "method": "setEnvironment",
+                    "arguments": [
+                        {
+                            "name": "environment",
+                            "type": "call",
+                            "properties": {
+                                "interface": "ride\\application\\system\\System",
+                                "method": "getEnvironment"
+                            }
+                        }
+                    ]
+                },
                 "setConfig"
             ]
         },
