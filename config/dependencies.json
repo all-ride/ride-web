@@ -62,12 +62,13 @@
                    ]
                }
             ]
-        },        
+        },
         {
             "interfaces": ["ride\\library\\http\\client\\Client"],
             "class": "ride\\library\\http\\client\\CurlClient",
-            "id": "curl"
-        },        
+            "id": "curl",
+            "calls": ["setLog"]
+        },
         {
             "class": "ride\\library\\system\\file\\File",
             "id": "session",
@@ -115,7 +116,7 @@
             ]
         },
         {
-            "interfaces": "ride\\web\\router\\io\\RouteContainerIO", 
+            "interfaces": "ride\\web\\router\\io\\RouteContainerIO",
             "class": "ride\\web\\router\\io\\ParserRouteContainerIO",
             "id": "web",
             "calls": [
@@ -213,7 +214,7 @@
                     ]
                 }
             ]
-        },            
+        },
         {
             "interfaces": "ride\\library\\mvc\\controller\\Controller",
             "class": "ride\\web\\mvc\\controller\\FileController",
@@ -239,8 +240,8 @@
             "class": "ride\\web\\mvc\\dispatcher\\DependencyDispatcher",
             "id": "dependency",
             "calls": [
-                "setConfig", 
-                "setDependencyInjector", 
+                "setConfig",
+                "setDependencyInjector",
                 "setLog",
                 {
                     "method": "setValueDecorator",
