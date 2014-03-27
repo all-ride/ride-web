@@ -92,7 +92,7 @@ class ExceptionView implements View {
 
                 $output .= '<p>The code:</p>';
                 $output .= '<p><a href="file://' . $fileUrl . '">' . $exception['file'] . '</a></p>';
-                $output .= '<pre>' . $source . '</pre>';
+                $output .= '<pre>' . htmlentities($source) . '</pre>';
                 $source = null;
             }
             $output .= '<p>The trace:</p>';
