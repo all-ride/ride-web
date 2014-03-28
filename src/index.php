@@ -16,6 +16,8 @@ try {
         $parameters = null;
     }
 
+    ob_start();
+
     // service the web
     $system = new ride\application\system\System($parameters);
     $system->service('web');
@@ -23,6 +25,8 @@ try {
     // error occured
     $protocol = isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0';
     header($protocol . ' 500 Internal Server Error');
+
+    while (@ob_end_flush());
 
     $view = new ride\web\mvc\view\ExceptionView($exception);
     $view->render(false);
