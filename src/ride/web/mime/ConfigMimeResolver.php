@@ -23,13 +23,13 @@ class ConfigMimeResolver implements MimeResolver {
 
     /**
      * Instance of the configuration
-     * @var ride\library\config\Config
+     * @var \ride\library\config\Config
      */
     protected $config;
 
     /**
      * Constructs a new MIME
-     * @param ride\library\config\Config $config
+     * @param \ride\library\config\Config $config
      * @return null
      */
     public function __construct(Config $config) {

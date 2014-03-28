@@ -13,7 +13,7 @@ class FileView implements View {
 
     /**
      * The file to render
-     * @var zibo\library\filesystem\File
+     * @var \ride\library\system\file\File
      */
     protected $file;
 
@@ -26,7 +26,7 @@ class FileView implements View {
 
     /**
      * Constructs a new file view
-     * @param ride\library\system\file\File $file File to render
+     * @param \ride\library\system\file\File $file File to render
      * @return null
      */
     public function __construct(File $file) {
@@ -40,7 +40,7 @@ class FileView implements View {
 
     /**
      * Gets the file of this view
-     * @return ride\library\system\file\File
+     * @return \ride\library\system\file\File
      */
     public function getFile() {
         return $this->file;

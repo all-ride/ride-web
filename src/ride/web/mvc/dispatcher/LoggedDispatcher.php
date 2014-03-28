@@ -15,19 +15,19 @@ class LoggedDispatcher extends GenericDispatcher {
 
     /**
      * Instance of the log
-     * @var ride\library\log\Log
+     * @var \ride\library\log\Log
      */
     protected $log;
 
     /**
      * Decorator for logged values
-     * @var ride\library\decorator\Decorator
+     * @var \ride\library\decorator\Decorator
      */
     protected $valueDecorator;
 
     /**
      * Sets the log
-     * @param ride\library\log\Log $log
+     * @param \ride\library\log\Log $log
      * @return null
      */
     public function setLog(Log $log) {
@@ -36,7 +36,7 @@ class LoggedDispatcher extends GenericDispatcher {
 
     /**
      * Gets the dependency injector
-     * @return ride\library\log\Log|null
+     * @return \ride\library\log\Log|null
      */
     public function getLog(Log $log) {
         return $this->log;
@@ -53,7 +53,7 @@ class LoggedDispatcher extends GenericDispatcher {
 
     /**
      * Gets the value decorator for logged values
-     * @return ride\library\decorator\Decorator
+     * @return \ride\library\decorator\Decorator
      */
     public function getValueDecorator() {
         return $this->valueDecorator;

@@ -20,19 +20,19 @@ abstract class AbstractController extends LibAbstractController {
 
     /**
      * Instance of the configuration
-     * @var ride\library\config\Config
+     * @var \ride\library\config\Config
      */
     protected $config;
 
     /**
      * Instance of the dependency injector
-     * @var ride\library\dependency\DependencyInjector
+     * @var \ride\library\dependency\DependencyInjector
      */
     protected $dependencyInjector;
 
     /**
      * Sets the instance of the configuration
-     * @param ride\library\config\Config $config
+     * @param \ride\library\config\Config $config
      * @return null
      */
     public function setConfig(Config $config) {
@@ -41,7 +41,7 @@ abstract class AbstractController extends LibAbstractController {
 
     /**
      * Sets the instance of the dependency injector
-     * @param ride\library\dependency\DependencyInjector $dependencyInjector
+     * @param \ride\library\dependency\DependencyInjector $dependencyInjector
      * @return null
      */
     public function setDependencyInjector(DependencyInjector $dependencyInjector) {
@@ -53,7 +53,7 @@ abstract class AbstractController extends LibAbstractController {
      * @param string $routeId The id of the route
      * @param array $arguments Path arguments for the route
      * @return string
-     * @throws ride\library\router\exception\RouterException If the route is
+     * @throws \ride\library\router\exception\RouterException If the route is
      * not found
      */
     protected function getUrl($routeId, array $arguments = null) {
@@ -75,7 +75,7 @@ abstract class AbstractController extends LibAbstractController {
 
     /**
      * Sets a download view for the provided file to the response
-     * @param ride\library\system\file\File $file File which needs to be
+     * @param \ride\library\system\file\File $file File which needs to be
      * offered for download
      * @param string $name Name for the download
      * @param boolean $cleanUp Set to true to add an event to delete the file
@@ -113,8 +113,8 @@ abstract class AbstractController extends LibAbstractController {
 
     /**
      * Cleans up the download file
-     * @param ride\library\system\file\File $file File to clean up after the response
-     * @param ride\library\event\Event $event Triggered event
+     * @param \ride\library\system\file\File $file File to clean up after the response
+     * @param \ride\library\event\Event $event Triggered event
      * @return null
      */
     public function cleanUpDownload(File $file = null, Event $event = null) {

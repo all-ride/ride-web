@@ -98,37 +98,37 @@ class WebApplication implements Application {
 
     /**
      * Instance of the event manager
-     * @var ride\library\event\EventManager
+     * @var \ride\library\event\EventManager
      */
     protected $eventManager;
 
     /**
      * HTTP factory to create request and response objects
-     * @var ride\library\http\HttpFactory
+     * @var \ride\library\http\HttpFactory
      */
     protected $httpFactory;
 
     /**
      * Router to obtain the Route object
-     * @var ride\library\router\Router
+     * @var \ride\library\router\Router
      */
     protected $router;
 
     /**
      * Dispatcher of the route callback
-     * @var ride\library\mvc\dispatcher\Dispatcher
+     * @var \ride\library\mvc\dispatcher\Dispatcher
      */
     protected $dispatcher;
 
     /**
      * Data container of the request
-     * @var ride\library\mvc\Request
+     * @var \ride\library\mvc\Request
      */
     protected $request;
 
     /**
      * Data container of the response
-     * @var ride\library\mvc\Response
+     * @var \ride\library\mvc\Response
      */
     protected $response;
 
@@ -140,13 +140,13 @@ class WebApplication implements Application {
 
     /**
      * Instance of the Log
-     * @var zibo\library\log\Log
+     * @var \ride\library\log\Log
      */
     protected $log;
 
     /**
      * Instance of the dependency injector
-     * @var ride\library\dependency\DependencyInjector
+     * @var \ride\library\dependency\DependencyInjector
      */
     protected $dependencyInjector;
 
@@ -181,7 +181,7 @@ class WebApplication implements Application {
 
     /**
      * Sets the Log
-     * @param ride\library\log\Log $log
+     * @param \ride\library\log\Log $log
      * @return null
      */
     public function setLog(Log $log) {
@@ -190,7 +190,7 @@ class WebApplication implements Application {
 
     /**
      * Gets the Log
-     * @return ride\library\log\Log
+     * @return \ride\library\log\Log
      */
     public function getLog() {
         return $this->log;
@@ -207,7 +207,7 @@ class WebApplication implements Application {
 
     /**
      * Sets the request
-     * @param ride\library\mvc\Request $request
+     * @param \ride\library\mvc\Request $request
      * @return null
      */
     public function setRequest(Request $request = null) {
@@ -216,7 +216,7 @@ class WebApplication implements Application {
 
     /**
      * Gets the request
-     * @return ride\library\mvc\Request
+     * @return \ride\library\mvc\Request
      */
     public function getRequest() {
         return $this->request;
@@ -225,7 +225,7 @@ class WebApplication implements Application {
     /**
      * Creates a request
      * @param string $path Path for the request
-     * @return ride\library\http\Request
+     * @return \ride\library\http\Request
      */
     public function createRequest($path = null, $method = null) {
         if (!$path) {
@@ -260,7 +260,7 @@ class WebApplication implements Application {
 
     /**
      * Gets the response
-     * @return ride\library\mvc\Response
+     * @return \ride\library\mvc\Response
      */
     public function getResponse() {
         return $this->response;
@@ -268,7 +268,7 @@ class WebApplication implements Application {
 
     /**
      * Sets the router
-     * @param ride\library\router\Router $router
+     * @param \ride\library\router\Router $router
      * @return null
      */
     public function setRouter(Router $router) {
@@ -277,7 +277,7 @@ class WebApplication implements Application {
 
     /**
      * Gets the router
-     * @return ride\library\router\Router
+     * @return \ride\library\router\Router
      */
     public function getRouter() {
         return $this->router;
@@ -303,7 +303,7 @@ class WebApplication implements Application {
 
     /**
      * Sets the dispatcher
-     * @param ride\library\mvc\dispatcher\Dispatcher $dispatcher
+     * @param \ride\library\mvc\dispatcher\Dispatcher $dispatcher
      * @return null
      */
     public function setDispatcher(Dispatcher $dispatcher) {
@@ -312,7 +312,7 @@ class WebApplication implements Application {
 
     /**
      * Gets the dispatcher
-     * @return ride\library\mvc\dispatcher\Dispatcher
+     * @return \ride\library\mvc\dispatcher\Dispatcher
      */
     public function getDispatcher() {
         return $this->dispatcher;
