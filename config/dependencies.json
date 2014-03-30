@@ -107,7 +107,7 @@
                             "name": "timeout",
                             "type": "parameter",
                             "properties": {
-                                "key": "app.session.timeout",
+                                "key": "system.session.timeout",
                                 "default": 1800
                             }
                         }
