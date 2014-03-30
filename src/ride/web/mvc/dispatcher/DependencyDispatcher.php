@@ -21,19 +21,19 @@ class DependencyDispatcher extends LoggedDispatcher {
 
     /**
      * Instance of the configuration
-     * @var ride\library\config\Config
+     * @var \ride\library\config\Config
      */
     protected $config;
 
     /**
      * Instance of the dependency injector
-     * @var ride\library\dependency\DependencyInjector
+     * @var \ride\library\dependency\DependencyInjector
      */
     protected $dependencyInjector;
 
     /**
      * Sets the configuration
-     * @param ride\library\config\Config $config
+     * @param \ride\library\config\Config $config
      * @return null
      */
     public function setConfig(Config $config) {
@@ -42,7 +42,7 @@ class DependencyDispatcher extends LoggedDispatcher {
 
     /**
      * Sets the dependency injector
-     * @param ride\library\dependency\DependencyInjector $dependencyInjector
+     * @param \ride\library\dependency\DependencyInjector $dependencyInjector
      * @return null
      */
     public function setDependencyInjector(DependencyInjector $dependencyInjector) {

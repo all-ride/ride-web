@@ -19,7 +19,7 @@ class Request extends LibRequest {
 
     /**
      * Instance of the dependency injector
-     * @var ride\library\dependency\DependencyInjector
+     * @var \ride\library\dependency\DependencyInjector
      */
     protected $dependencyInjector;
 
@@ -71,7 +71,7 @@ class Request extends LibRequest {
 
     /**
      * Gets the session container
-     * @return ride\library\http\session\Session
+     * @return \ride\library\http\session\Session
      */
     public function getSession() {
         if ($this->session) {

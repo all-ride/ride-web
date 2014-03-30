@@ -99,7 +99,7 @@ class XmlRouteContainerIO implements RouteContainerIO {
 
     /**
      * Constructs a new XML dependency IO
-     * @param ride\core\environment\filebrowser\FileBrowser $fileBrowser
+     * @param \ride\library\system\file\browser\fileBrowser
      * @param string $environment
      * @return null
      */
@@ -109,7 +109,7 @@ class XmlRouteContainerIO implements RouteContainerIO {
 
     /**
      * Gets the route container
-     * @return ride\library\router\RouteContainer
+     * @return \ride\library\router\RouteContainer
      */
     public function getRouteContainer() {
         if (!$this->routeContainer) {
@@ -148,7 +148,7 @@ class XmlRouteContainerIO implements RouteContainerIO {
 
     /**
      * Reads the aliases from the provided file
-     * @param ride\library\filesystem\File $file
+     * @param \ride\library\system\file\File $file
      * @return null
      */
     protected function readContainerFromFile(RouteContainer $routeContainer, File $file) {
@@ -160,7 +160,7 @@ class XmlRouteContainerIO implements RouteContainerIO {
 
     /**
      * Gets the routes object from an XML routes element
-     * @param ride\library\filesystem\File $file the file which is being
+     * @param \ride\library\system/file\File $file the file which is being
      * read
      * @param DomElement $routesElement the element which contains route
      * elements
@@ -218,7 +218,7 @@ class XmlRouteContainerIO implements RouteContainerIO {
 
     /**
      * Gets the routes object from an XML routes element
-     * @param ride\library\filesystem\File $file the file which is being
+     * @param \ride\library\system\file\File $file the file which is being
      * read
      * @param DomElement $routesElement the element which contains route
      * elements
@@ -249,13 +249,13 @@ class XmlRouteContainerIO implements RouteContainerIO {
 
     /**
      * Gets the value of an attribute from the provided XML element
-     * @param ride\library\filesystem\File $file the file which is being read
+     * @param \ride\library\system\file\File $file the file which is being read
      * @param DomElement $element the element from which the attribute needs to
      * be retrieved
      * @param string $name name of the attribute
      * @param boolean $required flag to see if the value is required or not
      * @return string
-     * @throws ride\library\router\exception\RouterException when the attribute
+     * @throws \ride\library\router\exception\RouterException when the attribute
      * is required but not set or empty
      */
     private function getAttribute(File $file, DOMElement $element, $name, $required = true) {
@@ -270,7 +270,7 @@ class XmlRouteContainerIO implements RouteContainerIO {
 
     /**
      * Sets the route container to the data source
-     * @param ride\library\router\RouteContainer $container The container to write
+     * @param \ride\library\router\RouteContainer $container The container to write
      * @return null
      */
     public function setRouteContainer(RouteContainer $container) {
@@ -284,7 +284,7 @@ class XmlRouteContainerIO implements RouteContainerIO {
         // read the current routes not defined in application
         $xmlRouteContainer = new RouteContainer();
 
-        $files = array_reverse($fileBrowser->getFiles($path . self::FILE));
+        $files = array_reverse($this->fileBrowser->getFiles($path . self::FILE));
         foreach ($files as $file) {
             if (strpos($file->getPath(), $xmlFile->getPath()) !== false) {
                 continue;

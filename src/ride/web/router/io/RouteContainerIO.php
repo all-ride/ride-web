@@ -11,7 +11,7 @@ interface RouteContainerIO {
 
     /**
      * Gets the route container from a data source
-     * @return ride\library\router\RouteContainer
+     * @return \ride\library\router\RouteContainer
      */
     public function getRouteContainer();
 

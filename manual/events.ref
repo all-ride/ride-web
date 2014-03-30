@@ -1,0 +1,7 @@
+app.exception          Invoked when a uncatched exception is thrown. This event has the thrown exception and the web application as arguments. (exception, web)
+app.route.pre          Invoked before routing the request. This event has the web application as argument. (web)
+app.route.post         Invoked after routing the request. This event has the web application as argument. (web)
+app.dispatch.pre       Invoked before dispatching a request to it's controller. This event has the web application as argument (web)
+app.dispatch.post      Invoked adter dispatching a request to it's controller. This event has the web application as argument (web)
+app.response.pre       Invoked before the response is rendered and send. This event has the web application as argument (web)
+app.response.post      Invoked after the response has been rendered and sent. This event has the web application as argument (web)

@@ -18,7 +18,7 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
 
     /**
      * Parser for the configuration files
-     * @var ride\library\config\parser\Parser
+     * @var \ride\library\config\parser\Parser
      */
     protected $parser;
 
@@ -30,8 +30,8 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
 
     /**
      * Constructs a new route container IO
-     * @param ride\library\system\file\browser\FileBrowser $fileBrowser
-     * @param ride\library\config\parser\Parser $parser
+     * @param \ride\library\system\file\browser\FileBrowser $fileBrowser
+     * @param \ride\library\config\parser\Parser $parser
      * @param string $file
      * @param string $path
      * @return null
@@ -45,7 +45,7 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
 
     /**
      * Gets the route container
-     * @return ride\library\router\RouteContainer
+     * @return \ride\library\router\RouteContainer
      */
     public function getRouteContainer() {
         if (!$this->routeContainer) {
@@ -84,8 +84,8 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
 
     /**
      * Reads the routes from the provided file
-     * @param ride\library\router\RouteContainer $routeContainer
-     * @param ride\library\system\file\File $file
+     * @param \ride\library\router\RouteContainer $routeContainer
+     * @param \ride\library\system\file\File $file
      * @param string $prefix Path prefix
      * @return null
      */
@@ -108,7 +108,7 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
 
     /**
      * Adds the routes from the provided route struct to the provided container
-     * @param ride\library\router\RouteContainer $routeContainer Container of
+     * @param \ride\library\router\RouteContainer $routeContainer Container of
      * the read routes
      * @param array $routeStruct Structure with the route data
      * @param string $prefix Path prefix
@@ -235,7 +235,7 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
 
     /**
      * Sets the route container to the data source
-     * @param ride\library\router\RouteContainer $container The container to write
+     * @param \ride\library\router\RouteContainer $container The container to write
      * @return null
      */
     public function setRouteContainer(RouteContainer $container) {
@@ -291,9 +291,9 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
 
     /**
      * Parses a route into a structure
-     * @param ride\library\router\Route $route
+     * @param \ride\library\router\Route $route
      * @return array
-     * @throws ride\library\router\exception\RouterException when an invalid
+     * @throws \ride\library\router\exception\RouterException when an invalid
      * argument is set to the route
      */
     protected function parseStructFromRoute(Route $route) {
