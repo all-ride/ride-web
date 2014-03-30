@@ -17,8 +17,8 @@ class FileController extends AbstractController {
 
     /**
      * Constructs a new file controller
-     * @param ride\library\system\file\browser\FileBrowser $fileBrowser
-     * @param ride\library\system\file\File $path
+     * @param \ride\library\system\file\browser\FileBrowser $fileBrowser
+     * @param \ride\library\system\file\File $path
      * @return null
      */
     public function __construct(FileBrowser $fileBrowser, File $path) {
@@ -89,7 +89,7 @@ class FileController extends AbstractController {
     /**
      * Gets the file from the Zibo include path
      * @param string $path Relative path of the file in the web directory
-     * @return null|zibo\library\filesystem\File
+     * @return null|\ride\library\system\file\File
      */
     protected function getFile($path) {
         $plainFile = $this->path->getChild($path);

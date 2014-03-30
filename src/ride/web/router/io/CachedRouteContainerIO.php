@@ -18,21 +18,21 @@ class CachedRouteContainerIO implements RouteContainerIO {
 
     /**
      * RouterContainerIO which is cached by this RouterContainerIO
-     * @var ride\web\router\io\RouterContainerIO
+     * @var \ride\web\router\io\RouterContainerIO
      */
     private $io;
 
     /**
      * File to write the cache to
-     * @var ride\library\system\file\File
+     * @var \ride\library\system\file\File
      */
     private $file;
 
     /**
      * Constructs a new cached RouterContainerIO
-     * @param ride\web\router\io\RouterContainerIO $io the RouterContainerIO
+     * @param \ride\web\router\io\RouterContainerIO $io the RouterContainerIO
      * which needs a cache
-     * @param ride\library\system\file\File $file The file for the cache
+     * @param \ride\library\system\file\File $file The file for the cache
      * @return null
      */
     public function __construct(RouteContainerIO $io, File $file) {
@@ -42,7 +42,7 @@ class CachedRouteContainerIO implements RouteContainerIO {
 
     /**
      * Sets the file for the generated code
-     * @param ride\library\system\file\File $file File to generate the code in
+     * @param \ride\library\system\file\File $file File to generate the code in
      * @return null
      */
     public function setFile(File $file) {
@@ -51,7 +51,7 @@ class CachedRouteContainerIO implements RouteContainerIO {
 
     /**
      * Gets the file for the generated code
-     * @return ride\library\system\file\File File to generate the code in
+     * @return \ride\library\system\file\File File to generate the code in
      * @return null
      */
     public function getFile() {
@@ -60,7 +60,7 @@ class CachedRouteContainerIO implements RouteContainerIO {
 
     /**
      * Gets the route container from a data source
-     * @return ride\library\router\RouteContainer
+     * @return \ride\library\router\RouteContainer
      */
     public function getRouteContainer() {
         if ($this->file->exists()) {
@@ -104,7 +104,7 @@ class CachedRouteContainerIO implements RouteContainerIO {
 
     /**
      * Generates a PHP source file for the provided route container
-     * @param ride\library\router\RouteContainer $container
+     * @param \ride\library\router\RouteContainer $container
      * @return string
      */
     protected function generatePhp(RouteContainer $container) {
