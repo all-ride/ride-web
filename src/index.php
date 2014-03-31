@@ -20,6 +20,7 @@ try {
 
     // service the web
     $system = new ride\application\system\System($parameters);
+    $system->setTimeZone();
     $system->service('web');
 } catch (Exception $exception) {
     // error occured
