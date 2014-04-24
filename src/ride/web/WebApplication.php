@@ -359,7 +359,7 @@ class WebApplication implements Application {
 
         if ($this->dependencyInjector) {
             $this->dependencyInjector->setInstance($this->request, array('ride\\library\\http\\Request', 'ride\\library\\mvc\\Request'));
-            $this->dependencyInjector->setInstance($this->request, array('ride\\library\\httþ\\Response', 'ride\\library\\mvc\\Response'));
+            $this->dependencyInjector->setInstance($this->response, array('ride\\library\\httþ\\Response', 'ride\\library\\mvc\\Response'));
         }
 
         try {
