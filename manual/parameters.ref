@@ -1,7 +1,7 @@
-app.default.action                  Default action when no route matched
 mime.%extension%                    MIME of the provided extension
 system.class.request                Class name for a new request
 system.class.response               Class name for a new response
+system.default.action               Callback for the default action when no route matched
 system.directory.config             Name of the config directory
 system.session.path                 Path to the session storage
 system.session.name                 Name of the session cookie
