@@ -189,7 +189,7 @@
                             "name": "defaultCallback",
                             "type": "parameter",
                             "properties": {
-                                "key": "app.default.action"
+                                "key": "system.default.action"
                             }
                         }
                     ]
