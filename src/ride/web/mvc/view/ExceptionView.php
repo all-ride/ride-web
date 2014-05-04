@@ -3,7 +3,7 @@
 namespace ride\web\mvc\view;
 
 use ride\library\mvc\view\View;
-use ride\library\String;
+use ride\library\StringHelper;
 
 use \Exception;
 
@@ -151,8 +151,8 @@ class ExceptionView implements View {
             return '';
         }
 
-        $source = new String(file_get_contents($exception->getFile()));
-        $source = $source->addLineNumbers();
+        $source = file_get_contents($exception->getFile());
+        $source = StringHelper::addLineNumbers($source);
         $source = explode("\n", $source);
 
         $line = $exception->getLine();

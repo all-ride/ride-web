@@ -11,7 +11,7 @@
     ],
     "require": {
         "ride/app": ">=0.4.0",
-        "ride/lib-common": ">=0.3.0",
+        "ride/lib-common": ">=0.4.0",
         "ride/lib-config": ">=0.2.0",
         "ride/lib-dependency": ">=0.4.0",
         "ride/lib-event": ">=0.3.0",
