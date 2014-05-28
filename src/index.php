@@ -24,8 +24,10 @@ try {
     $system->service('web');
 } catch (Exception $exception) {
     // error occured
-    $protocol = isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0';
-    header($protocol . ' 500 Internal Server Error');
+    if (!headers_sent()) {
+        $protocol = isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0';
+        header($protocol . ' 500 Internal Server Error');
+    }
 
     while (@ob_end_flush());
 
