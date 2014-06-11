@@ -2,12 +2,12 @@
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    
+
     # existing files or folders
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d
-    RewriteRule ^.* - [L]    
+    RewriteRule ^.* - [L]
 
-    # the rest is for Pallo
+    # the rest is for Ride
     RewriteRule ^(.*)$ index.php [NE,L,QSA]
 </IfModule>
