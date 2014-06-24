@@ -4,6 +4,7 @@ namespace ride\web\http\session\io;
 
 use ride\library\http\exception\HttpException;
 use ride\library\http\session\io\SessionIO;
+use ride\library\log\Log;
 use ride\library\system\file\File;
 
 /**
@@ -22,6 +23,12 @@ class FileSessionIO implements SessionIO {
      * @var integer
      */
     protected $timeout;
+
+    /**
+     * Instance of the log
+     * @var \ride\library\log\Log
+     */
+    protected $log;
 
     /**
      * Constructs a new file session IO
@@ -75,6 +82,15 @@ class FileSessionIO implements SessionIO {
     }
 
     /**
+     * Sets the log to this IO
+     * @param \ride\library\log\Log $log
+     * @return null
+     */
+    public function setLog(Log $log) {
+        $this->log = $log;
+    }
+
+    /**
      * Cleans up the sessions which are invalidated
      * @param boolean $force Set to true to clear all sessions
      * @return null
@@ -106,6 +122,10 @@ class FileSessionIO implements SessionIO {
         $expires = time() - $this->timeout;
 
         if ($file->getModificationTime() < $expires) {
+            if ($this->log) {
+                $this->log->logDebug('Session ' . $id . ' has expired');
+            }
+
             $file->delete();
 
             return array();
@@ -115,6 +135,10 @@ class FileSessionIO implements SessionIO {
 
         $data = unserialize($serialized);
         if ($data === false) {
+            if ($this->log) {
+                $this->log->logError('Could not read session');
+            }
+
             $data = array();
         }
 
