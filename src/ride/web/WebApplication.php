@@ -552,7 +552,9 @@ class WebApplication implements Application {
         // write the session
         if ($this->request->hasSession()) {
             $session = $this->request->getSession();
-            $session->write();
+            if ($session->isChanged()) {
+                $session->write();
+            }
 
             if ($this->log) {
                 $this->log->logDebug('Current session:', $session->getId(), System::LOG_SOURCE);
