@@ -74,7 +74,7 @@ abstract class AbstractController extends LibAbstractController {
     }
 
     /**
-     * Sets a download view for the provided file to the response
+     * Sets a file view for the provided file to the response
      * @param \ride\library\system\file\File $file File which needs to be
      * offered for download
      * @param string $name Name for the download
@@ -82,7 +82,7 @@ abstract class AbstractController extends LibAbstractController {
      * after the response has been sent
      * @return null
      */
-    protected function setDownloadView(File $file, $name = null, $cleanUp = false) {
+    protected function setFileView(File $file, $name = null, $cleanUp = false) {
         if ($name === null) {
             $name = $file->getName();
             $mimeFile = $file;
@@ -102,13 +102,27 @@ abstract class AbstractController extends LibAbstractController {
 
         $this->response->setHeader(Header::HEADER_CACHE_CONTROL, 'no-cache, must-revalidate');
         $this->response->setHeader(Header::HEADER_CONTENT_TYPE, $mime);
-        $this->response->setHeader(Header::HEADER_CONTENT_DESCRIPTION, 'File Transfer');
-        $this->response->setHeader(Header::HEADER_CONTENT_DISPOSITION, 'attachment; filename="' . $name . '"');
         $this->response->setView($view);
 
         if ($cleanUp) {
             $this->cleanUpDownload($file);
         }
+    }
+
+    /**
+     * Sets a download view for the provided file to the response
+     * @param \ride\library\system\file\File $file File which needs to be
+     * offered for download
+     * @param string $name Name for the download
+     * @param boolean $cleanUp Set to true to add an event to delete the file
+     * after the response has been sent
+     * @return null
+     */
+    protected function setDownloadView(File $file, $name = null, $cleanUp = false) {
+        $this->setFileView($file, $name, $cleanUp);
+
+        $this->response->setHeader(Header::HEADER_CONTENT_DESCRIPTION, 'File Transfer');
+        $this->response->setHeader(Header::HEADER_CONTENT_DISPOSITION, 'attachment; filename="' . $name . '"');
     }
 
     /**
