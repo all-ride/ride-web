@@ -35,10 +35,7 @@ class ExceptionView implements View {
      * rendered output otherwise
      */
     public function render($willReturnValue = true) {
-        $exception = $this->getExceptionArray($this->exception);
-        $source = $this->getExceptionSource($this->exception);
-
-        $output = $this->renderHtml($exception, $source);
+        $output = $this->renderHtml($this->getExceptions($this->exception));
 
         if ($willReturnValue) {
             return $output;
@@ -50,10 +47,9 @@ class ExceptionView implements View {
     /**
      * Renders the HTML of the exception array
      * @param array $exception
-     * @param string $source Source snippet
      * @return string HTML page for the exception
      */
-    protected function renderHtml(array $exception, $source) {
+    protected function renderHtml(array $exceptions) {
         $output = "<!DOCTYPE html>\n";
         $output .= "<html>\n";
         $output .= "    <head>\n";
@@ -68,7 +64,8 @@ class ExceptionView implements View {
         $output .= "			<p>An exception is thrown and it was not caught by the system.</p>\n";
         $output .= "			<div style=\"font-size: smaller;\">\n";
 
-        do {
+        $indexLastException = count($exceptions) - 1;
+        foreach ($exceptions as $index => $exception) {
             $messageLines = explode("\n", $exception['message']);
             $message = array_shift($messageLines);
 
@@ -82,7 +79,8 @@ class ExceptionView implements View {
                 $output .= '</pre>';
             }
 
-            if ($source) {
+            if ($index == 0) {
+                $source = $this->getExceptionSource($exception['exception']);
                 $fileUrl = $exception['file'];
 
                 $sc = strrpos($fileUrl, ':');
@@ -93,18 +91,16 @@ class ExceptionView implements View {
                 $output .= '<p>The code:</p>';
                 $output .= '<p><a href="file://' . $fileUrl . '">' . $exception['file'] . '</a></p>';
                 $output .= '<pre>' . htmlentities($source) . '</pre>';
+
                 $source = null;
             }
             $output .= '<p>The trace:</p>';
             $output .= '<pre>' . $exception['trace'] . '</pre>';
 
-            if (isset($exception['cause'])) {
-                $exception = $exception['cause'];
-                $output .= "<p>Caused by:</p>";
-            } else {
-                $exception = null;
+            if ($index != $indexLastException) {
+                $output .= "<p>Causes:</p>";
             }
-        } while ($exception);
+        };
 
         $output .= "            </div>\n";
         $output .= "        </div>\n";
@@ -112,6 +108,22 @@ class ExceptionView implements View {
         $output .= "</html>";
 
         return $output;
+    }
+
+    /**
+     * Gets an array of the provided exception with causing exceptions
+     * @param Exception $exception
+     * @return array Array with Exception instances in order of cause
+     */
+    protected function getExceptions(Exception $exception) {
+        $exceptions = array();
+
+        do {
+            $exceptions[] = $this->getExceptionArray($exception);
+            $exception = $exception->getPrevious();
+        } while ($exception);
+
+        return array_reverse($exceptions);
     }
 
     /**
@@ -126,15 +138,10 @@ class ExceptionView implements View {
         $array['message'] = get_class($exception) . (!empty($message) ? ': ' . $message : '');
         $array['file'] = $exception->getFile() . ':' . $exception->getLine();
         $array['trace'] = $exception->getTraceAsString();
-        $array['cause'] = null;
+        $array['exception'] = $exception;
 
         if ($exception instanceof ValidationException) {
             $array['message'] .= $exception->getErrorsAsString();
-        }
-
-        $cause = $exception->getPrevious();
-        if (!empty($cause)) {
-            $array['cause'] = $this->getExceptionArray($cause);
         }
 
         return $array;
