@@ -10,10 +10,10 @@
         }
     ],
     "require": {
-        "ride/app": ">=0.4.0",
+        "ride/app": ">=0.5.0",
         "ride/lib-common": ">=0.4.0",
         "ride/lib-config": ">=0.2.0",
-        "ride/lib-dependency": ">=0.4.0",
+        "ride/lib-dependency": ">=0.7.0",
         "ride/lib-event": ">=0.3.0",
         "ride/lib-http": ">=0.3.4",
         "ride/lib-http-client": ">=0.1.0",
@@ -21,10 +21,10 @@
         "ride/lib-mvc": ">=0.2.0",
         "ride/lib-router": ">=0.1.0",
         "ride/lib-system": ">=0.2.1"
-    }, 
+    },
     "autoload": {
         "psr-0": {
-            "ride\\web\\": ["src/", "test/src/"]
+            "ride\\web\\": ["src/"]
         }
     }
 }

@@ -47,21 +47,10 @@
         },
         {
             "interfaces": ["ride\\library\\http\\Request", "ride\\library\\mvc\\Request"],
-            "class": "ride\\library\\mvc\\Request",
-            "calls": [
-               {
-                   "method": "__construct",
-                   "arguments": [
-                       {
-                           "name": "path",
-                           "type": "scalar",
-                           "properties": {
-                               "value": "/"
-                           }
-                       }
-                   ]
-               }
-            ]
+            "factory": {
+                "interface": "ride\\library\\http\\HttpFactory",
+                "method": "createRequestFromServer"
+            }
         },
         {
             "interfaces": ["ride\\library\\http\\client\\Client"],
