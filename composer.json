@@ -2,7 +2,7 @@
     "name": "ride/web",
     "description": "Web interface for a Ride application",
     "license": "MIT",
-    "version": "0.4.11",
+    "version": "0.5.0",
     "authors": [
         {
             "name": "Joris Vandeweerd",
