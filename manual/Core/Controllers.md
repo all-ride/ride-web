@@ -1,8 +1,8 @@
 Controllers are the objects which glue your models and views together.
 They perform the actions of your application on the models and pack the results in a view.
 
-Controllers are defined in the router.
-The combination of a HTTP request method and a requested path is mapped to a action in a controller.
+Controllers are defined in the router or in the dependencies file.
+The combination of a HTTP request method and a requested path is mapped to an action in a controller.
 
 ## Simple Controller
 
@@ -72,32 +72,39 @@ The _$page_ argument can be inserted with a request argument (#wiki.page) or a p
     }
 
 The _$wiki_ argument is inserted through the [Dependencies](/admin/documentation/manual/page/Core/Dependencies).
-When referenced as a action argument, the last defined dependency is used.
+When referenced as an action argument, the last defined dependency is used.
 When a dependency with a specific id is desired, you can add a setter to your controller to set through the dependencies.
 
 ## preAction And postAction
 
 You can override the _preAction_ and the _postAction_ method if needed.
 These methods take no arguments and are invoked before and after every action of your controller.
-The _preAction_ method should return a boolean to state if the action should be invoked.
+The _preAction_ method should return a boolean to state if the main action should be invoked.
 
-    use ride\web\mvc\controller\AbstractController;
+         use ride\web\mvc\controller\AbstractController;
 
-    class FooController extends AbstractController {
+         class FooController extends AbstractController {
 
-        public function preAction() {
-            return true;
-        }
+             public function preAction() {
+                $user = $this->getUser();
 
-        public function indexAction() {
-            ...
-        }
+                if ($user === null) {
+                    throw new UnauthorizedException;
 
-        public function postAction() {
-            ...
-        }
+                }
+                
+                return true;
+             }
 
-    }
+             public function indexAction() {
+                 // Show some content only authorized users should be able to see
+             }
+
+             public function postAction() {
+                 ...
+             }
+
+         }
 
 ## HTTP
 
