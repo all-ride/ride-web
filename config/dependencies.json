@@ -256,6 +256,19 @@
                 "setDependencyInjector",
                 "setLog",
                 {
+                    "method": "setValueDecorator",
+                    "arguments": [
+                        {
+                            "name": "valueDecorator",
+                            "type": "dependency",
+                            "properties": {
+                                "interface": "ride\\library\\decorator\\Decorator",
+                                "id": "variable"
+                            }
+                        }
+                    ]
+                },
+                {
                     "method": "setSessionTimeout",
                     "arguments": [
                         {
