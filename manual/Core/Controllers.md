@@ -1,8 +1,9 @@
 Controllers are the objects which glue your models and views together.
 They perform the actions of your application on the models and pack the results in a view.
 
-Controllers are defined in the router or in the dependencies file.
 The combination of a HTTP request method and a requested path is mapped to an action in a controller.
+This mapping is defined in the router. 
+Controllers can be defined in the dependencies.
 
 ## Simple Controller
 
@@ -79,7 +80,7 @@ When a dependency with a specific id is desired, you can add a setter to your co
 
 You can override the _preAction_ and the _postAction_ method if needed.
 These methods take no arguments and are invoked before and after every action of your controller.
-The _preAction_ method should return a boolean to state if the main action should be invoked.
+The _preAction_ method should return a boolean to state if the requested action should be invoked.
 
          use ride\web\mvc\controller\AbstractController;
 
