@@ -5,6 +5,7 @@ namespace ride\web;
 use ride\application\system\System;
 use ride\application\Application;
 
+use ride\library\decorator\Decorator;
 use ride\library\dependency\DependencyInjector;
 use ride\library\event\EventManager;
 use ride\library\http\Cookie;
@@ -145,6 +146,12 @@ class WebApplication implements Application {
     protected $log;
 
     /**
+     * Decorator for log values
+     * @var \ride\library\decorator\Decorator
+     */
+    protected $valueDecorator;
+
+    /**
      * Instance of the dependency injector
      * @var \ride\library\dependency\DependencyInjector
      */
@@ -168,6 +175,7 @@ class WebApplication implements Application {
         $this->request = null;
         $this->response = null;
         $this->log = null;
+        $this->valueDecorator = null;
         $this->state = self::STATE_IDLE;
     }
 
@@ -194,6 +202,15 @@ class WebApplication implements Application {
      */
     public function getLog() {
         return $this->log;
+    }
+
+    /**
+     * Sets the value decorator used to log values
+     * @param \ride\library\decorator\Decorator $decorator
+     * @return null
+     */
+    public function setValueDecorator(Decorator $valueDecorator) {
+        $this->valueDecorator = $valueDecorator;
     }
 
     /**
@@ -549,25 +566,7 @@ class WebApplication implements Application {
 
         $this->eventManager->triggerEvent(self::EVENT_POST_RESPONSE, array('web' => $this));
 
-        // write the session
-        if ($this->request->hasSession()) {
-            $session = $this->request->getSession();
-            if ($session->isChanged()) {
-                $session->write();
-            }
-
-            if ($this->log) {
-                $this->log->logDebug('Current session:', $session->getId(), System::LOG_SOURCE);
-
-                $variables = $session->getAll();
-                ksort($variables);
-                foreach ($variables as $name => $value) {
-                    $this->log->logDebug('- ' . $name, var_export($value, true), System::LOG_SOURCE);
-                }
-            }
-        } elseif ($this->log) {
-            $this->log->logDebug('No session loaded', '', System::LOG_SOURCE);
-        }
+        $this->writeSession();
     }
 
     /**
@@ -609,8 +608,10 @@ class WebApplication implements Application {
             return;
         }
 
-        $cookieName = $this->request->getSessionCookieName();
         $session = $this->request->getSession();
+        if (!$session->getAll()) {
+            return;
+        }
 
         $timeout = $this->getSessionTimeout();
         if ($timeout) {
@@ -620,13 +621,55 @@ class WebApplication implements Application {
         }
 
         $domain = $this->request->getHeader(Header::HEADER_HOST);
+
         $path = str_replace($this->request->getServerUrl(), '', $this->request->getBaseUrl());
         if (!$path) {
             $path = '/';
         }
 
-        $cookie = new Cookie($cookieName, $session->getId(), $expires, $domain, $path);
+        $cookie = new Cookie($this->request->getSessionCookieName(), $session->getId(), $expires, $domain, $path);
+
         $this->response->setCookie($cookie);
+    }
+
+    /**
+     * Writes the session to the data source and log the current values for debug
+     * @return null
+     */
+    protected function writeSession() {
+        // write the session
+        $session = null;
+        if ($this->request->hasSession()) {
+            $session = $this->request->getSession();
+            if ($session->isChanged()) {
+                $session->write();
+            }
+
+            if (!$session->getAll()) {
+                $session = null;
+            }
+        }
+
+        // log the session
+        if (!$this->log) {
+            return;
+        }
+
+        if ($session) {
+            $this->log->logDebug('Current session:', $session->getId(), System::LOG_SOURCE);
+
+            if ($this->valueDecorator) {
+                $variables = $session->getAll();
+
+                ksort($variables);
+
+                foreach ($variables as $name => $value) {
+                    $this->log->logDebug('- ' . $name, $this->valueDecorator->decorate($value), System::LOG_SOURCE);
+                }
+            }
+        } else {
+            $this->log->logDebug('No session loaded', '', System::LOG_SOURCE);
+        }
     }
 
     /**
