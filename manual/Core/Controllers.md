@@ -19,7 +19,7 @@ Controllers can be defined in the dependencies.
 
 ## Action Arguments
 
-The arguments of a action can be inserted in 3 ways:
+The arguments of an action can be inserted in 3 ways:
 
 * A request argument of the route
 * A predefined argument of the route
@@ -114,7 +114,7 @@ This will benefit the speed for your users and the load of your servers.
 
 ### Handle Not Modified
 
-#### With A E-Tag
+#### With An E-Tag
 
 In your controller
 
