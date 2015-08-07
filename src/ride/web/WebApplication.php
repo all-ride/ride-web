@@ -471,7 +471,7 @@ class WebApplication implements Application {
             } else {
                 $this->setRequest(null);
 
-                $allowedMethods = $routerResult->getAllowedMethods();
+                $allowedMethods = array_keys($routerResult->getAllowedMethods());
 
                 $this->response->setStatusCode(Response::STATUS_CODE_METHOD_NOT_ALLOWED);
                 $this->response->addHeader(Header::HEADER_ALLOW, implode(', ', $allowedMethods));
@@ -703,6 +703,9 @@ class WebApplication implements Application {
         if ($this->log) {
             $this->log->logException($exception, System::LOG_SOURCE);
         }
+
+        $this->response->setStatusCode(Response::STATUS_CODE_SERVER_ERROR);
+        $this->response->clearRedirect();
 
         if ($this->eventManager->hasEventListeners(self::EVENT_EXCEPTION)) {
             $this->eventManager->triggerEvent(self::EVENT_EXCEPTION, array('web' => $this, 'exception' => $exception));

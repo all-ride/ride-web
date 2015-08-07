@@ -2,7 +2,7 @@ The routing is used to translate a requested path to the controller of the MVC l
 
 ## A Route
 
-A route defines a request path to a action.
+A route defines a request path to an action.
 A action can be any PHP callback which will handle the incoming request to a response.
 Check the [Controllers](/admin/documentation/manual/page/Core/Controllers) page for more information about actions.
 
@@ -15,7 +15,7 @@ You can optionally set an id to a route to retrieve it in your code.
 By using ids, you can easily generate URL's from your code.
 It also gives you the possibility to override a path through your configuration without changing your code.
 
-Keep your code clean by implementing only one action in a action method.
+Keep your code clean by implementing only one action in an action method.
 Limiting a route to a specific, or multiple request methods (GET, POST, ...) can help you with this.
 
 ## Routes.json
