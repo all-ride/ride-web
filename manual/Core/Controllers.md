@@ -7,15 +7,19 @@ Controllers can be defined in the dependencies.
 
 ## Simple Controller
 
-    use ride\web\mvc\controller\AbstractController;
+```php
+<?php
 
-    class FooController extends AbstractController {
+use ride\web\mvc\controller\AbstractController;
 
-        public function indexAction() {
-            ...
-        }
+class FooController extends AbstractController {
 
+    public function indexAction() {
+        ...
     }
+
+}
+```
 
 ## Action Arguments
 
@@ -27,50 +31,54 @@ The arguments of an action can be inserted in 3 ways:
 
 Assume the following controller:
 
-    <?php
+```php
+<?php
 
-    namespace vendor\wiki\controller;
+namespace vendor\wiki\controller;
 
-    use ride\web\mvc\controller\AbstractController;
+use ride\web\mvc\controller\AbstractController;
 
-    use vendor\wiki\model\Wiki;
+use vendor\wiki\model\Wiki;
 
-    class WikiController extends AbstractController {
+class WikiController extends AbstractController {
 
-        public function pageAction(Wiki $wiki, $page) {
-            ...
-        }
+    public function pageAction(Wiki $wiki, $page) {
+        ...
     }
+}
+```
 
 The _$page_ argument can be inserted with a request argument (#wiki.page) or a predefined argument (#help.controllers):
 
-    {
-        "routes": [
-            {
-                "path": "/wiki/page/%page%",
-                "controller": "vendor\\wiki\\controller\\WikiController",
-                "action": "pageAction",
-                "id": "wiki.page",
-                "methods": ["head", "get"]
-            },
-            {
-                "path": "/help/controllers",
-                "controller": "vendor\\wiki\\controller\\WikiController",
-                "action": "pageAction",
-                "id": "help.controllers",
-                "methods": ["head", "get"],
-                "arguments": [
-                    {
-                        "name": "page",
-                        "type": "scalar",
-                        "properties": {
-                            "value": "Controllers"
-                        }
+```json
+{
+    "routes": [
+        {
+            "path": "/wiki/page/%page%",
+            "controller": "vendor\\wiki\\controller\\WikiController",
+            "action": "pageAction",
+            "id": "wiki.page",
+            "methods": ["head", "get"]
+        },
+        {
+            "path": "/help/controllers",
+            "controller": "vendor\\wiki\\controller\\WikiController",
+            "action": "pageAction",
+            "id": "help.controllers",
+            "methods": ["head", "get"],
+            "arguments": [
+                {
+                    "name": "page",
+                    "type": "scalar",
+                    "properties": {
+                        "value": "Controllers"
                     }
-                ]
-            }
-        ]
-    }
+                }
+            ]
+        }
+    ]
+}
+```
 
 The _$wiki_ argument is inserted through the [Dependencies](/admin/documentation/manual/page/Core/Dependencies).
 When referenced as an action argument, the last defined dependency is used.
@@ -82,30 +90,33 @@ You can override the _preAction_ and the _postAction_ method if needed.
 These methods take no arguments and are invoked before and after every action of your controller.
 The _preAction_ method should return a boolean to state if the requested action should be invoked.
 
-         use ride\web\mvc\controller\AbstractController;
+```php
+<?php
 
-         class FooController extends AbstractController {
+use ride\web\mvc\controller\AbstractController;
 
-             public function preAction() {
-                $user = $this->getUser();
+class FooController extends AbstractController {
 
-                if ($user === null) {
-                    throw new UnauthorizedException;
+    public function preAction() {
+       $user = $this->getUser();
 
-                }
-                
-                return true;
-             }
+        if ($user === null) {
+           throw new UnauthorizedException;
+        }
+        
+        return true;
+    }
 
-             public function indexAction() {
-                 // Show some content only authorized users should be able to see
-             }
+    public function indexAction() {
+        // Show some content only authorized users should be able to see
+    }
 
-             public function postAction() {
-                 ...
-             }
+    public function postAction() {
+        ...
+    }
 
-         }
+}
+```
 
 ## HTTP
 
@@ -118,27 +129,29 @@ This will benefit the speed for your users and the load of your servers.
 
 In your controller
 
-    public function indexAction() {
-        // gather your content
-        // ...
+```php
+public function indexAction() {
+    // gather your content
+    // ...
 
-        // for simplicity, your content is just $content
-        $eTag = md5($content);
+    // for simplicity, your content is just $content
+    $eTag = md5($content);
 
-        // set the E-Tag to the response, a header will be created for it
-        $this->response->setETag($eTag);
+    // set the E-Tag to the response, a header will be created for it
+    $this->response->setETag($eTag);
 
-        // check the request
-        if ($this->response->isNotModified($this->request)) {
-            // the content hasn't changed since the last request
-            $this->response->setNotModified();
+    // check the request
+    if ($this->response->isNotModified($this->request)) {
+        // the content hasn't changed since the last request
+        $this->response->setNotModified();
 
-            return;
-        }
-
-        // generate a view for your content and set it to the response
-        // ...
+        return;
     }
+
+    // generate a view for your content and set it to the response
+    // ...
+}
+```
 
 ## AbstractController
 
@@ -148,21 +161,23 @@ The benefits of extending the AbstractController of Ride.
 
 A shortcut to set json data as view:
 
-    <?php
+```php
+<?php
 
-    use ride\web\mvc\controller\AbstractController;
+use ride\web\mvc\controller\AbstractController;
 
-    class FooController extends AbstractController {
+class FooController extends AbstractController {
 
-        public function indexAction() {
-            $data = array(
-                'name' => 'Foo',
-            );
+    public function indexAction() {
+        $data = array(
+            'name' => 'Foo',
+        );
 
-            $this->setJsonView($data);
-        }
-
+        $this->setJsonView($data);
     }
+
+}
+```
 
 ### Set A Download View
 
@@ -170,26 +185,30 @@ Offering files for explicit download is a rather common thing to do when develop
 The _setDownloadView_ method will make this an easy task for you.
 It will handle all the headers needed for the download.
 
-    <?php
+```php
+<?php
 
-    use ride\library\system\file\browser\FileBrowser;
+use ride\library\system\file\browser\FileBrowser;
 
-    use ride\web\mvc\controller\AbstractController;
+use ride\web\mvc\controller\AbstractController;
 
-    class FooController extends AbstractController {
+class FooController extends AbstractController {
 
-        public function indexAction(FileBrowser $fileBrowser)
-            $file = $fileBrowser->getFile('data/myfile.txt');
+    public function indexAction(FileBrowser $fileBrowser)
+        $file = $fileBrowser->getFile('data/myfile.txt');
 
-            $this->setDownloadView($file);
-        }
-
+        $this->setDownloadView($file);
     }
+
+}
+```
 
 You can force a name of the file for the download box of the user by providing an extra name.
 You can also provide a parameter to clean up the file if it's no longer needed after the download.
 
-    $this->setDownloadView($file, 'text.txt', true);
+```php
+$this->setDownloadView($file, 'text.txt', true);
+```
 
 Now the download box of the user will say _text.txt_ instead of _myfile.txt_.
 The _myfile.txt_ will also be deleted on the server.
@@ -200,10 +219,14 @@ This can be useful for generated files.
 The _getUrl_ method offers you a shortcut to obtaining URL's from the router.
 After the construction of your controller, you can use:
 
-    $url = $this->getUrl('route.id');
+```php
+$url = $this->getUrl('route.id');
+```
 
 You can also provide your arguments to the route:
 
-    $url = $this->getUrl('person.detail', array('id' => 5));
+```php
+$url = $this->getUrl('person.detail', array('id' => 5));
+```
 
 See the [Routing](/manual/page/Core/Routing) page for more information.

@@ -34,6 +34,14 @@ class JsonView implements View {
     }
 
     /**
+     * Gets the value of this view
+     * @return mixed
+     */
+    public function getValue() {
+        return $this->value;
+    }
+
+    /**
      * Renders the output for this view by encoding the value into JSON
      * @param boolean $willReturnValue True to return the rendered view, false
      * to send it straight to the client
