@@ -13,7 +13,7 @@ class ConfigMimeResolver implements MimeResolver {
      * Configuration key for the known MIME types
      * @var string
      */
-    const PARAM_MIME = 'mime.';
+    const PARAM_MIME = 'mime';
 
     /**
      * Default MIME type
@@ -46,7 +46,18 @@ class ConfigMimeResolver implements MimeResolver {
             return self::MIME_UNKNOWN;
         }
 
-        return $this->config->get(self::PARAM_MIME . $extension, self::MIME_UNKNOWN);
+        return $this->config->get(self::PARAM_MIME . '.' . $extension, self::MIME_UNKNOWN);
+    }
+
+    /**
+     * Gets the file extension for files with the provided MIME type
+     * @param string $mimeType MIME type
+     * @return string|boolean File extension of the MIME type, false otherwise
+     */
+    public function getExtensionForMimeType($mimeType) {
+        $extensions = $this->config->get(self::PARAM_MIME);
+
+        return array_search($mimeType, $extensions);
     }
 
 }
