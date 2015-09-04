@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "ride/app": ">=0.5.0",
+        "ride/app": ">=0.6.2",
         "ride/lib-common": ">=0.4.0",
         "ride/lib-config": ">=0.2.0",
         "ride/lib-dependency": ">=0.7.0",

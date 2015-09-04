@@ -287,6 +287,11 @@
             "interfaces": "ride\\web\\mime\\MimeResolver",
             "class": "ride\\web\\mime\\ConfigMimeResolver",
             "id": "config"
+        },
+        {
+            "interfaces": "ride\\library\\dependency\\argument\\ArgumentParser",
+            "class": "ride\\web\\dependency\\argument\\RouteArgumentParser",
+            "id": "route"
         }
     ]
 }
