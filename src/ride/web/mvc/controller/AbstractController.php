@@ -49,6 +49,25 @@ abstract class AbstractController extends LibAbstractController {
     }
 
     /**
+     * Gets the referer of the current request
+     * @param string $default Default referer to return when there is no
+     * referer set
+     * @return string URL to the last page displayed
+     */
+    protected function getReferer($default = null) {
+        $referer = $this->request->getQueryParameter('referer');
+        if (!$referer) {
+            $referer = $this->request->getHeader(Header::HEADER_REFERER);
+        }
+
+        if (!$referer) {
+            return $default;
+        }
+
+        return $referer;
+    }
+
+    /**
      * Gets the URL of the provided route
      * @param string $routeId The id of the route
      * @param array $arguments Path arguments for the route
