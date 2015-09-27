@@ -1,20 +1,8 @@
 <?php
 
-$bootstrap = __DIR__ . '/../vendor/autoload.php';
-$parameters = __DIR__ . '/../application/config/parameters.php';
-
 try {
     // include the bootstrap
-    include_once $bootstrap;
-
-    // read the parameters
-    if (file_exists($parameters)) {
-        include_once $parameters;
-    }
-
-    if (!is_array($parameters)) {
-        $parameters = null;
-    }
+    include_once __DIR__ . '/../application/src/bootstrap.php';
 
     ob_start();
 

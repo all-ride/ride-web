@@ -106,6 +106,24 @@
             ]
         },
         {
+            "class": "ride\\library\\system\\file\\File",
+            "id": "cache.router",
+            "calls": [
+                {
+                    "method": "__construct",
+                    "arguments": [
+                        {
+                            "name": "path",
+                            "type": "parameter",
+                            "properties": {
+                                "key": "system.cache.router"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "interfaces": "ride\\web\\router\\io\\RouteContainerIO",
             "class": "ride\\web\\router\\io\\ParserRouteContainerIO",
             "id": "web",
@@ -155,6 +173,54 @@
             ]
         },
         {
+            "interfaces": "ride\\web\\router\\io\\RouteContainerIO",
+            "class": "ride\\web\\router\\io\\ChainedRouteContainerIO",
+            "id": "chain",
+            "calls": [
+                {
+                    "method": "addRouteContainerIO",
+                    "arguments": [
+                        {
+                            "name": "routeContainerIO",
+                            "type": "dependency",
+                            "properties": {
+                                "interface": "ride\\web\\router\\io\\RouteContainerIO",
+                                "id": "web"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "interfaces": "ride\\web\\router\\io\\RouteContainerIO",
+            "class": "ride\\web\\router\\io\\CachedRouteContainerIO",
+            "id": "cache",
+            "calls": [
+                {
+                    "method": "__construct",
+                    "arguments": [
+                        {
+                            "name": "io",
+                            "type": "dependency",
+                            "properties": {
+                                "interface": "ride\\web\\router\\io\\RouteContainerIO",
+                                "id": "%system.route.container.cache%"
+                            }
+                        },
+                        {
+                            "name": "file",
+                            "type": "dependency",
+                            "properties": {
+                                "interface": "ride\\library\\system\\file\\File",
+                                "id": "cache.router"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "interfaces": "ride\\library\\router\\Router",
             "class": "ride\\library\\router\\GenericRouter",
             "id": "web",
@@ -167,6 +233,7 @@
                             "type": "call",
                             "properties": {
                                 "interface": "ride\\web\\router\\io\\RouteContainerIO",
+                                "id": "%system.route.container.default%",
                                 "method": "getRouteContainer"
                             }
                         }
@@ -180,6 +247,26 @@
                             "type": "parameter",
                             "properties": {
                                 "key": "system.default.action"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "interfaces": "ride\\library\\cache\\control\\CacheControl",
+            "class": "ride\\web\\cache\\control\\RouterCacheControl",
+            "id": "router",
+            "calls": [
+                {
+                    "method": "__construct",
+                    "arguments": [
+                        {
+                            "name": "io",
+                            "type": "dependency",
+                            "properties": {
+                                "interface": "ride\\web\\router\\io\\RouteContainerIO",
+                                "id": "%system.route.container.default%"
                             }
                         }
                     ]
@@ -277,6 +364,18 @@
                             "properties": {
                                 "interface": "ride\\library\\http\\session\\io\\SessionIO",
                                 "method": "getTimeout"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "method": "setRequest",
+                    "arguments": [
+                        {
+                            "name": "request",
+                            "type": "dependency",
+                            "properties": {
+                                "interface": "ride\\library\\mvc\\Request"
                             }
                         }
                     ]
