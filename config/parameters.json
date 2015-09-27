@@ -40,5 +40,7 @@
     "mime.xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "mime.xltx": "application/vnd.openxmlformats-officedocument.spreadsheetml.template",
     "mime.zip": "application/zip",
+    "system.cache.router": "%application%/data/cache/%environment%/routes.php",
+    "system.route.container.default": "chain",
     "system.session.path": "%application%/data/session"
 }

@@ -228,6 +228,10 @@ class WebApplication implements Application {
      * @return null
      */
     public function setRequest(Request $request = null) {
+        if ($this->dependencyInjector && method_exists($request, 'setDependencyInjector')) {
+            $request->setDependencyInjector($this->dependencyInjector);
+        }
+
         $this->request = $request;
     }
 
@@ -266,10 +270,6 @@ class WebApplication implements Application {
             }
 
             $request = $this->httpFactory->createRequest($path, $method, $protocol, $headers, $body);
-        }
-
-        if ($this->dependencyInjector && method_exists($request, 'setDependencyInjector')) {
-            $request->setDependencyInjector($this->dependencyInjector);
         }
 
         return $request;
@@ -351,7 +351,7 @@ class WebApplication implements Application {
         }
 
         if (!$this->request) {
-            $this->request = $this->createRequest();
+            $this->setRequest($this->createRequest());
         }
 
         // keep the initial request

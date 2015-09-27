@@ -1,8 +1,11 @@
 mime.%extension%                    MIME of the provided extension
+system.cache.router                 Path for the router cache file
 system.class.request                Class name for a new request
 system.class.response               Class name for a new response
 system.default.action               Callback for the default action when no route matched
 system.directory.config             Name of the config directory
+system.route.container.default      Dependency id of the route container IO in use
+system.route.container.cache        Dependency id of the cached route container IO
 system.session.path                 Path to the session storage
 system.session.name                 Name of the session cookie
 system.session.timeout              Session timeout in seconds, defaults to 1800

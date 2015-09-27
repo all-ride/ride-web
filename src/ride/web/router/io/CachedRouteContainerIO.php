@@ -29,15 +29,25 @@ class CachedRouteContainerIO implements RouteContainerIO {
     private $file;
 
     /**
-     * Constructs a new cached RouterContainerIO
-     * @param \ride\web\router\io\RouterContainerIO $io the RouterContainerIO
-     * which needs a cache
+     * Constructs a new cached router container
+     * @param \ride\web\router\io\RouterContainerIO $io RouterContainerIO which
+     * needs a cache
      * @param \ride\library\system\file\File $file The file for the cache
      * @return null
      */
     public function __construct(RouteContainerIO $io, File $file) {
         $this->io = $io;
         $this->setFile($file);
+    }
+    
+    /**
+     * Destructs the cached router container
+     * @return null
+     */
+    public function __destruct() {
+        if (isset($this->needsWrite)) {
+            $this->warmCache();
+        }
     }
 
     /**
@@ -72,7 +82,27 @@ class CachedRouteContainerIO implements RouteContainerIO {
                 return $container;
             }
         }
+
         // we have no container, use the wrapped IO to get one
+        return $this->io->getRouteContainer();
+    }
+
+    /**
+     * Sets the route container to the data source
+     * @param ride\library\router\RouteContainer;
+     * @return null
+     */
+    public function setRouteContainer(RouteContainer $container) {
+        $this->io->setRouterContainer($container);
+
+        $this->clearCache();
+    }
+
+    /**
+     * Warms the cache of the route container
+     * @return \ride\library\router\RouteContainer
+     */
+    public function warmCache() {
         $container = $this->io->getRouteContainer();
 
         // generate the PHP code for the obtained container
@@ -90,16 +120,15 @@ class CachedRouteContainerIO implements RouteContainerIO {
     }
 
     /**
-     * Sets the route container to the data source
-     * @param ride\library\router\RouteContainer;
+     * Clears the cache of the route container
      * @return null
      */
-    public function setRouteContainer(RouteContainer $container) {
-        $this->io->setRouterContainer($container);
-
+    public function clearCache() {
         if ($this->file->exists()) {
             $this->file->delete();
         }
+
+        $this->needsWrite = true;
     }
 
     /**
