@@ -63,7 +63,7 @@
                     "arguments": [
                         {
                             "name": "proxy",
-                            "type:": "parameter",
+                            "type": "parameter",
                             "properties": {
                                 "key": "http.proxy"
                             }
