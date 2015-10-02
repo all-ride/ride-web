@@ -56,7 +56,21 @@
             "interfaces": ["ride\\library\\http\\client\\Client"],
             "class": "ride\\library\\http\\client\\CurlClient",
             "id": "curl",
-            "calls": ["setLog"]
+            "calls": [
+                "setLog",
+                {
+                    "method": "setProxy",
+                    "arguments": [
+                        {
+                            "name": "proxy",
+                            "type:": "parameter",
+                            "properties": {
+                                "key": "http.proxy"
+                            }
+                        }
+                    ]
+                }
+            ]
         },
         {
             "class": "ride\\library\\system\\file\\File",
