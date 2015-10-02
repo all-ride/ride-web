@@ -1,3 +1,4 @@
+http.proxy                          URL for the proxy server of the HTTP client
 mime.%extension%                    MIME of the provided extension
 system.cache.router                 Path for the router cache file
 system.class.request                Class name for a new request
