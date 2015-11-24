@@ -59,7 +59,7 @@ class RouterService {
      * @param string|array|null $allowedMethods Allowed methods for this route
      * @return \ride\library\router\Route
      */
-    public function createRoute($path, $callback, $id, $methods) {
+    public function createRoute($path, $callback, $id = null, $methods = null) {
         return $this->routeContainer->createRoute($path, $callback, $id, $methods);
     }
 
