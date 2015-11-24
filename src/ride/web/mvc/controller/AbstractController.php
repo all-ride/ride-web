@@ -71,15 +71,17 @@ abstract class AbstractController extends LibAbstractController {
      * Gets the URL of the provided route
      * @param string $routeId The id of the route
      * @param array $arguments Path arguments for the route
+     * @param array $queryParameters Array with the query parameter name as key
+     * and the parameter as value.
+     * @param string $querySeparator Separator between the query parameters
      * @return string
      * @throws \ride\library\router\exception\RouterException If the route is
      * not found
      */
-    protected function getUrl($routeId, array $arguments = null) {
-        $router = $this->dependencyInjector->get('ride\\library\\router\\Router');
-        $routeContainer = $router->getRouteContainer();
+    protected function getUrl($routeId, array $arguments = null, array $queryParameters = null, $querySeparator = '&') {
+        $routerService = $this->dependencyInjector->get('ride\\service\\RouterService');
 
-        return $routeContainer->getUrl($this->request->getBaseScript(), $routeId, $arguments);
+        return $routerService->getUrl($this->request->getBaseScript(), $routeId, $arguments, $queryParameters, $querySeparator);
     }
 
     /**

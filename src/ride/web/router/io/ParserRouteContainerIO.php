@@ -6,6 +6,7 @@ use ride\library\config\io\AbstractIO;
 use ride\library\config\parser\Parser;
 use ride\library\dependency\DependencyCallArgument;
 use ride\library\router\exception\RouterException;
+use ride\library\router\Alias;
 use ride\library\router\RouteContainer;
 use ride\library\router\Route;
 use ride\library\system\file\browser\FileBrowser;
@@ -15,6 +16,12 @@ use ride\library\system\file\File;
  * XML implementation of the RouterIO
  */
 class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
+
+    /**
+     * Source for the routes and aliases
+     * @var string
+     */
+    const SOURCE = 'parser';
 
     /**
      * Parser for the configuration files
@@ -60,7 +67,7 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
      * @return null
      */
     protected function readContainer() {
-        $this->routeContainer = new RouteContainer();
+        $this->routeContainer = new RouteContainer(static::SOURCE);
 
         $path = null;
         if ($this->path) {
@@ -94,12 +101,16 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
             $content = $file->read();
             $content = $this->parser->parseToPhp($content);
 
-            if (!isset($content['routes'])) {
-                return;
+            if (isset($content['routes'])) {
+                foreach ($content['routes'] as $routeStruct) {
+                    $this->readContainerFromRouteStruct($routeContainer, $routeStruct, $prefix);
+                }
             }
 
-            foreach ($content['routes'] as $routeStruct) {
-                $this->readContainerFromRouteStruct($routeContainer, $routeStruct, $prefix);
+            if (isset($content['aliases'])) {
+                foreach ($content['aliases'] as $aliasStruct) {
+                    $this->readContainerFromRouteAliasStruct($routeContainer, $aliasStruct, $prefix);
+                }
             }
         } catch (Exception $exception) {
             throw new DependencyException('Could not read routes from ' . $file, 0, $exception);
@@ -163,7 +174,7 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
                 $allowedMethods = null;
             }
 
-            $route = new Route($prefix . $path, $callback, $id, $allowedMethods);
+            $route = $routeContainer->createRoute($prefix . $path, $callback, $id, $allowedMethods);
 
             if (isset($routeStruct['dynamic'])) {
                 $route->setIsDynamic($this->processParameter($routeStruct['dynamic']));
@@ -185,7 +196,7 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
                 $route->setPredefinedArguments($arguments);
             }
 
-            $routeContainer->addRoute($route);
+            $routeContainer->setRoute($route);
         }
 
         if ($routeStruct) {
@@ -234,6 +245,38 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
     }
 
     /**
+     * Adds the alias from the provided alias struct to the provided container
+     * @param \ride\library\router\RouteContainer $routeContainer Container of
+     * the read routes
+     * @param array $aliasStruct Structure with the route alias data
+     * @param string $prefix Path prefix
+     * @return null
+     */
+    protected function readContainerFromRouteAliasStruct(RouteContainer $routeContainer, array $aliasStruct, $prefix) {
+        if (!isset($aliasStruct['path'])) {
+            throw new RouterException('Could not parse alias structure: no path set');
+        } elseif (!isset($aliasStruct['alias'])) {
+            throw new RouterException('Could not parse alias structure: no alias set');
+        }
+
+        $alias = $routeContainer->createAlias($prefix . $aliasStruct['path'], $aliasStruct['alias']);
+
+        unset($aliasStruct['path']);
+        unset($aliasStruct['alias']);
+
+        if (isset($aliasStruct['force'])) {
+            $alias->setIsForced($aliasStruct['force']);
+            unset($aliasStruct['force']);
+        }
+
+        $routeContainer->setAlias($alias);
+
+        if ($aliasStruct) {
+            throw new RouterException('Could not add alias ' . $alias->getAlias() . ': provided properties are invalid (' . implode(', ', array_keys($aliasStruct)) . ')');
+        }
+    }
+
+    /**
      * Sets the route container to the data source
      * @param \ride\library\router\RouteContainer $container The container to write
      * @return null
@@ -246,8 +289,8 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
 
         $parserFile = $this->fileBrowser->getApplicationDirectory()->getChild($path . $this->file);
 
-        // read the current routes not defined in application
-        $moduleRouteContainer = new RouteContainer();
+        // read the container not defined in application
+        $moduleRouteContainer = new RouteContainer(static::SOURCE);
 
         $files = array_reverse($this->fileBrowser->getFiles($path . $this->file));
         foreach ($files as $file) {
@@ -260,8 +303,16 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
 
         // filter the routes which are not defined in application
         $moduleRoutes = $moduleRouteContainer->getRoutes();
+        $moduleAliases = $moduleRouteContainer->getAliases();
+
         $routes = $container->getRoutes();
         foreach ($routes as $index => $route) {
+            if ($route->getSource() !== static::SOURCE) {
+                unset($routes[$index]);
+
+                continue;
+            }
+
             foreach ($moduleRoutes as $moduleRoute) {
                 if ($moduleRoute == $route) {
                     unset($routes[$index]);
@@ -269,8 +320,23 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
             }
         }
 
-        if (!$routes) {
-            // no routes left to write
+        $aliases = $container->getAliases();
+        foreach ($aliases as $index => $alias) {
+            if ($alias->getSource() !== static::SOURCE) {
+                unset($aliases[$index]);
+
+                continue;
+            }
+
+            foreach ($moduleAliases as $moduleAlias) {
+                if ($moduleAlias == $alias) {
+                    unset($aliases[$index]);
+                }
+            }
+        }
+
+        if (!$routes && !$aliases) {
+            // nothing left to write
             if ($parserFile->exists()) {
                 $parserFile->delete();
             }
@@ -279,12 +345,23 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
         }
 
         // write the routes
-        $parserRoutes = array();
-        foreach ($routes as $route) {
-            $parserRoutes[] = $this->parseStructFromRoute($route);
+        $definition = array();
+
+        if ($routes) {
+            $definition['routes'] = array();
+            foreach ($routes as $route) {
+                $definition['routes'][] = $this->parseStructFromRoute($route);
+            }
         }
 
-        $content = $this->parser->parseFromPhp(array('routes' => $parserRoutes));
+        if ($aliases) {
+            $definition['aliases'] = array();
+            foreach ($aliases as $alias) {
+                $definition['aliases'][] = $this->parseStructFromAlias($alias);
+            }
+        }
+
+        $content = $this->parser->parseFromPhp($definition);
 
         $parserFile->write($content);
     }
@@ -338,16 +415,24 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
         if ($predefinedArguments) {
             $routeStruct['arguments'] = array();
 
-            foreach ($predefinedArguments as $argument) {
-                if (!$argument instanceof DependencyCallArgument) {
-                    throw new RouterException('Invalid predefined argument for route ' . $route->getPath());
-                }
+            foreach ($predefinedArguments as $argumentName => $argument) {
+                if (is_scalar($argument)) {
+                    $argumentStruct = array(
+                        'name' => $argumentName,
+                        'type' => 'scalar',
+                        'properties' => array('value' => $argument),
+                    );
+                } else {
+                    if (!$argument instanceof DependencyCallArgument) {
+                        throw new RouterException('Invalid predefined argument for route ' . $route->getPath());
+                    }
 
-                $argumentStruct = array(
-                    'name' => $argument->getName(),
-                    'type' => $argument->getType(),
-                    'properties' => $argument->getProperties(),
-                );
+                    $argumentStruct = array(
+                        'name' => $argument->getName(),
+                        'type' => $argument->getType(),
+                        'properties' => $argument->getProperties(),
+                    );
+                }
 
                 $routeStruct['arguments'][] = $argumentStruct;
             }
@@ -356,4 +441,21 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
         return $routeStruct;
     }
 
+    /**
+     * Parses a route alias into a structure
+     * @param \ride\library\router\Alias $alias
+     * @return array
+     */
+    protected function parseStructFromAlias(Alias $alias) {
+        $aliasStruct = array(
+        	'path' => $alias->getPath(),
+        	'alias' => $alias->getAlias(),
+        );
+
+        if ($alias->isForced()) {
+            $aliasStruct['force'] = true;
+        }
+
+        return $aliasStruct;
+    }
 }

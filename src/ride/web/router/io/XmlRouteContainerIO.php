@@ -212,7 +212,7 @@ class XmlRouteContainerIO implements RouteContainerIO {
                 $route->setBaseUrl($baseUrl);
             }
 
-            $routeContainer->addRoute($route);
+            $routeContainer->setRoute($route);
         }
     }
 

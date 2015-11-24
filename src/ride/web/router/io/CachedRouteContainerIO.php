@@ -39,7 +39,7 @@ class CachedRouteContainerIO implements RouteContainerIO {
         $this->io = $io;
         $this->setFile($file);
     }
-    
+
     /**
      * Destructs the cached router container
      * @return null
@@ -146,7 +146,7 @@ class CachedRouteContainerIO implements RouteContainerIO {
         $output .= "use ride\\library\\router\\Route;\n";
         $output .= "use ride\\library\\router\\RouteContainer;\n";
         $output .= "\n";
-        $output .= '$container' . " = new RouteContainer();\n";
+        $output .= '$container' . " = new RouteContainer('cache');\n";
         $output .= "\n";
 
         $routes = $container->getRoutes();
@@ -166,6 +166,9 @@ class CachedRouteContainerIO implements RouteContainerIO {
             $output .= var_export($id, true) . ', ';
             $output .= var_export($allowedMethods, true) . ");\n";
 
+            if ($route->getSource()) {
+                $output .= '$route->setSource(' . var_export($route->getSource(), true) . ');' . "\n";
+            }
             if ($route->isDynamic()) {
                 $output .= '$route->setIsDynamic(true);' . "\n";
             }
@@ -210,7 +213,24 @@ class CachedRouteContainerIO implements RouteContainerIO {
                 $output .= '$route->setBaseUrl(' . var_export($baseUrl, true) . ');' . "\n";
             }
 
-            $output .= '$container->addRoute($route);' . "\n\n";
+            $output .= '$container->setRoute($route);' . "\n\n";
+        }
+
+        $aliases = $container->getAliases();
+        foreach ($aliases as $alias) {
+            $output .= '$alias = new RouteAlias(';
+            $output .= var_export($alias->getPath(), true) . ', ';
+            $output .= var_export($alias->getAlias(), true) . ');' . "\n";
+
+            if ($alias->isForced()) {
+                $output .= '$alias->setIsForced(true);' . "\n";
+            }
+
+            if ($alias->getSource()) {
+                $output .= '$alias->setSource(' . var_export($alias->getSource(), true) . ');' . "\n";
+            }
+
+            $output .= '$container->setAlias($alias);' . "\n\n";
         }
 
         return $output;
