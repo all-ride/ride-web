@@ -268,6 +268,25 @@
             ]
         },
         {
+            "class": "ride\\service\\RouterService",
+            "id": "web",
+            "calls": [
+                {
+                    "method": "__construct",
+                    "arguments": [
+                        {
+                            "name": "routeContainerIO",
+                            "type": "dependency",
+                            "properties": {
+                                "interface": "ride\\web\\router\\io\\RouteContainerIO",
+                                "id": "%system.route.container.default%"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "interfaces": "ride\\library\\cache\\control\\CacheControl",
             "class": "ride\\web\\cache\\control\\RouterCacheControl",
             "id": "router",

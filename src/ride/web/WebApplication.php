@@ -15,8 +15,8 @@ use ride\library\log\Log;
 use ride\library\mvc\dispatcher\Dispatcher;
 use ride\library\mvc\Request;
 use ride\library\mvc\Response;
-use ride\library\router\Router;
-use ride\library\router\Route;
+
+use ride\service\RouterService;
 
 use \Exception;
 
@@ -111,9 +111,9 @@ class WebApplication implements Application {
 
     /**
      * Router to obtain the Route object
-     * @var \ride\library\router\Router
+     * @var \ride\service\RouterService
      */
-    protected $router;
+    protected $routerService;
 
     /**
      * Dispatcher of the route callback
@@ -167,10 +167,10 @@ class WebApplication implements Application {
      * Constructs a new web app
      * @return null
      */
-    public function __construct(EventManager $eventManager, HttpFactory $httpFactory, Router $router, Dispatcher $dispatcher) {
+    public function __construct(EventManager $eventManager, HttpFactory $httpFactory, RouterService $routerService, Dispatcher $dispatcher) {
         $this->eventManager = $eventManager;
         $this->httpFactory = $httpFactory;
-        $this->router = $router;
+        $this->routerService = $routerService;
         $this->dispatcher = $dispatcher;
         $this->request = null;
         $this->response = null;
@@ -284,38 +284,28 @@ class WebApplication implements Application {
     }
 
     /**
-     * Sets the router
-     * @param \ride\library\router\Router $router
-     * @return null
-     */
-    public function setRouter(Router $router) {
-        $this->router = $router;
-    }
-
-    /**
-     * Gets the router
+     * Gets the router service
      * @return \ride\library\router\Router
      */
-    public function getRouter() {
-        return $this->router;
+    public function getRouterService() {
+        return $this->routerService;
     }
 
     /**
-     * Gets the URL of the provided route
-     * @param string $routeId The id of the route
-     * @param array $arguments Path arguments for the route
-     * @return string
+     * Gets the URL for the provided route
+     * @param string $routeId Id of the route
+     * @param array $arguments Array with the argument name as key and the
+     * argument as value.
+     * @param array $queryParameters Array with the query parameter name as key
+     * and the parameter as value.
+     * @return string Generated URL
      */
-    public function getUrl($routeId, array $arguments = null) {
-        if (!$this->router) {
-            throw new Exception('Could not get the URL for ' . $routeId . ': no router set');
-        } elseif (!$this->request) {
+    public function getUrl($routeId, array $arguments = null, array $queryParameters = null, $querySeparator = '&') {
+        if (!$this->request) {
             throw new Exception('Could not get the URL for ' . $routeId . ': no request set');
         }
 
-        $routeContainer = $this->router->getRouteContainer();
-
-        return $routeContainer->getUrl($this->request->getBaseScript(), $routeId, $arguments);
+        return $this->routerService->getUrl($this->request->getBaseScript(), $routeId, $arguments, $queryParameters, $querySeparator);
     }
 
     /**
@@ -393,14 +383,14 @@ class WebApplication implements Application {
                         $controller = $this->dependencyInjector->get('ride\\library\\mvc\\controller\\Controller', 'public');
                         $callback = array($controller, 'indexAction');
 
-                        $route = new Route('/', $callback);
+                        $route = $this->routerService->createRoute('/', $callback);
                         $route->setIsDynamic(true);
                         $route->setArguments(explode('/', $arguments));
                     } else {
                         $controller = $this->dependencyInjector->get('ride\\library\\mvc\\controller\\IndexController');
                         $callback = array($controller, 'indexAction');
 
-                        $route = new Route('/', $callback);
+                        $route = $this->routerService->createRoute('/', $callback);
                     }
 
                     $this->request = $request;
@@ -463,10 +453,14 @@ class WebApplication implements Application {
             $this->log->logDebug('Routing ' . $method . ' ' . $path, $baseUrl, System::LOG_SOURCE);
         }
 
-        $routerResult = $this->router->route($method, $path, $baseUrl);
+        $routerResult = $this->routerService->route($method, $path, $baseUrl);
         if (!$routerResult->isEmpty()) {
+            $alias = $routerResult->getAlias();
             $route = $routerResult->getRoute();
-            if ($route) {
+            if ($alias) {
+                $this->response->setRedirect($this->request->getBaseScript() . $alias->getAlias());
+                $this->setRequest(null);
+            } elseif ($route) {
                 $this->request->setRoute($route);
             } else {
                 $this->setRequest(null);
@@ -495,6 +489,8 @@ class WebApplication implements Application {
             $route = $request->getRoute();
 
             $this->log->logDebug('Routed to ' . $route, null, System::LOG_SOURCE);
+        } elseif (isset($alias)) {
+            $this->log->logDebug('Alias matched', $alias->getPath(), System::LOG_SOURCE);
         } else {
             $this->log->logDebug('No route matched', null, System::LOG_SOURCE);
         }

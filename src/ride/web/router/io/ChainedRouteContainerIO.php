@@ -43,13 +43,19 @@ class ChainedRouteContainerIO implements RouteContainerIO {
      * @return \ride\library\router\RouteContainer
      */
     public function getRouteContainer() {
-        $container = new RouteContainer();
+        $routeContainer = new RouteContainer();
 
         foreach ($this->io as $io) {
-            $container->addContainer($io->getRouteContainer());
+            $ioRouteContainer = $io->getRouteContainer();
+
+            $routeContainer->setRouteContainer($ioRouteContainer);
+
+            if (!$routeContainer->getSource() && $ioRouteContainer->getSource()) {
+                $routeContainer->setSource($ioRouteContainer->getSource());
+            }
         }
 
-        return $container;
+        return $routeContainer;
     }
 
     /**
@@ -58,12 +64,21 @@ class ChainedRouteContainerIO implements RouteContainerIO {
      * @return null
      */
     public function setRouteContainer(RouteContainer $routeContainer) {
-        $io = reset($this->io);
-        if (!$io) {
+        if (!$this->io) {
             throw new RouterException('Could not set the provided route container: chain is empty');
         }
 
-        $io->setRouteContainer($routeContainer);
+        foreach ($this->io as $io) {
+            try {
+                $io->setRouteContainer($routeContainer);
+
+                return;
+            } catch (RouterException $exception) {
+
+            }
+        }
+
+        throw new RouterException('Could not set the provided route container: no IO available in chain to save the definition');
     }
 
 }
