@@ -28,7 +28,7 @@ class JsonView implements View {
      * @return null
      * @see json_encode
      */
-    public function __construct($value, $options = 0) {
+    public function __construct($value, $options = JSON_PRETTY_PRINT) {
         $this->value = $value;
         $this->options = $options;
     }
