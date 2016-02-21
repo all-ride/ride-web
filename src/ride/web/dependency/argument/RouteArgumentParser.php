@@ -5,7 +5,7 @@ namespace ride\web\dependency\argument;
 use ride\application\dependency\argument\DependencyArgumentParser;
 
 use ride\library\config\Config;
-use ride\library\dependency\argument\ArgumentParser;
+use ride\library\dependency\argument\AbstractArgumentParser;
 use ride\library\dependency\exception\DependencyException;
 use ride\library\dependency\DependencyCallArgument;
 
@@ -14,7 +14,7 @@ use ride\web\WebApplication;
 /**
  * Parser to get a value from the routing table; with config support.
  */
-class RouteArgumentParser implements ArgumentParser {
+class RouteArgumentParser extends AbstractArgumentParser {
 
     /**
      * Name of the property for the id of a route
