@@ -79,6 +79,9 @@ class FileController extends AbstractController {
 
         // set content headers
         $mediaType = $this->mimeService->getMediaTypeForFile($file);
+        if ($mediaType && $mediaType->getMimeType() == 'text/plain') {
+            $mediaType = $this->mimeService->getMediaTypeForExtension($file->getExtension());
+        }
         if (!$mediaType) {
             $mediaType = 'application/octet-stream';
         }
