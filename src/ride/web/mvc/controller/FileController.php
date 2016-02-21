@@ -8,6 +8,8 @@ use ride\library\http\Response;
 use ride\library\system\file\browser\FileBrowser;
 use ride\library\system\file\File;
 
+use ride\service\MimeService;
+
 use ride\web\mvc\view\FileView;
 
 /**
@@ -18,11 +20,13 @@ class FileController extends AbstractController {
     /**
      * Constructs a new file controller
      * @param \ride\library\system\file\browser\FileBrowser $fileBrowser
+     * @param \ride\service\MimeService $mimeService
      * @param \ride\library\system\file\File $path
      * @return null
      */
-    public function __construct(FileBrowser $fileBrowser, File $path) {
+    public function __construct(FileBrowser $fileBrowser, MimeService $mimeService, File $path) {
         $this->fileBrowser = $fileBrowser;
+        $this->mimeService = $mimeService;
         $this->path = $path;
     }
 
@@ -74,10 +78,12 @@ class FileController extends AbstractController {
         }
 
         // set content headers
-        $mimeResolver = $this->dependencyInjector->get('ride\\web\\mime\\MimeResolver');
-        $mime = $mimeResolver->getMimeTypeByExtension($file->getExtension());
+        $mediaType = $this->mimeService->getMediaTypeForFile($file);
+        if (!$mediaType) {
+            $mediaType = 'application/octet-stream';
+        }
 
-        $this->response->setHeader(Header::HEADER_CONTENT_TYPE, $mime);
+        $this->response->setHeader(Header::HEADER_CONTENT_TYPE, (string) $mediaType);
         $this->response->setHeader(Header::HEADER_CONTENT_LENGTH, $fileSize);
 
         if (!$this->request->isHead()) {

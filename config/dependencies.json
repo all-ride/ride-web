@@ -416,9 +416,22 @@
             ]
         },
         {
-            "interfaces": "ride\\web\\mime\\MimeResolver",
-            "class": "ride\\web\\mime\\ConfigMimeResolver",
-            "id": "config"
+            "class": "ride\\library\\system\\file\\File",
+            "id": "upload",
+            "calls": [
+                {
+                    "method": "__construct",
+                    "arguments": [
+                        {
+                            "name": "path",
+                            "type": "parameter",
+                            "properties": {
+                                "key": "system.directory.user"
+                            }
+                        }
+                    ]
+                }
+            ]
         },
         {
             "interfaces": "ride\\library\\dependency\\argument\\ArgumentParser",
