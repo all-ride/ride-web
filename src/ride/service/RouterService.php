@@ -5,6 +5,7 @@ namespace ride\service;
 use ride\library\router\Alias;
 use ride\library\router\Router;
 use ride\library\router\Route;
+use ride\library\router\Url;
 
 use ride\web\router\io\RouteContainerIO;
 
@@ -33,11 +34,19 @@ class RouterService {
      * argument as value.
      * @param array $queryParameters Array with the query parameter name as key
      * and the parameter as value.
-     * @param string $querySeparator Separator between the query parameters
-     * @return string Generated URL
+     * @return \ride\library\router\Url Instance of the URL
      */
-    public function getUrl($baseUrl, $id, array $arguments = null, array $queryParameters = null, $querySeparator = '&') {
-        return $this->routeContainer->getUrl($baseUrl, $id, $arguments, $queryParameters, $querySeparator);
+    public function getUrl($baseUrl, $id, array $arguments = null, array $queryParameters = null) {
+        return $this->routeContainer->getUrl($baseUrl, $id, $arguments, $queryParameters);
+    }
+
+    /**
+     * Gets the alias for the provided URL
+     * @param \ride\library\router\Url $url
+     * @return string
+     */
+    public function getUrlAlias(Url $url) {
+        return $this->routeContainer->getUrlAlias($url);
     }
 
     /**

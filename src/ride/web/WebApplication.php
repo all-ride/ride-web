@@ -214,6 +214,14 @@ class WebApplication implements Application {
     }
 
     /**
+    * Gets the HTTP factory
+    * @return \ride\library\http\HttpFactory
+    */
+    public function getHttpFactory() {
+        return $this->httpFactory;
+    }
+
+    /**
      * Sets the dependency injector to obtain the session dynamically
      * @param DependencyInjector $dependencyInjector
      * @return null

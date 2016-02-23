@@ -7,6 +7,7 @@ use ride\library\dependency\DependencyInjector;
 use ride\library\event\Event;
 use ride\library\http\Header;
 use ride\library\mvc\controller\AbstractController as LibAbstractController;
+use ride\library\mvc\exception\MvcException;
 use ride\library\system\file\File;
 
 use ride\web\mvc\view\FileView;
@@ -20,6 +21,7 @@ abstract class AbstractController extends LibAbstractController {
 
     /**
      * Instance of the configuration
+     * @deprecated
      * @var \ride\library\config\Config
      */
     protected $config;
@@ -33,6 +35,7 @@ abstract class AbstractController extends LibAbstractController {
     /**
      * Sets the instance of the configuration
      * @param \ride\library\config\Config $config
+     * @deprecated
      * @return null
      */
     public function setConfig(Config $config) {
@@ -46,6 +49,38 @@ abstract class AbstractController extends LibAbstractController {
      */
     public function setDependencyInjector(DependencyInjector $dependencyInjector) {
         $this->dependencyInjector = $dependencyInjector;
+    }
+
+    /**
+    * Gets the web application
+    * @return \ride\library\system\System
+    */
+    protected function getWeb() {
+        return $this->dependencyInjector->get('ride\\web\\WebApplication');
+    }
+
+    /**
+     * Gets the config
+     * @return \ride\library\config\Config
+     */
+    protected function getConfig() {
+        return $this->dependencyInjector->get('ride\\library\\config\\Config');
+    }
+
+    /**
+     * Gets the system
+     * @return \ride\library\system\System
+     */
+    protected function getSystem() {
+        return $this->dependencyInjector->get('ride\\library\\systme\\System');
+    }
+
+    /**
+     * Gets the log
+     * @return \ride\library\log\Log
+     */
+    protected function getLog() {
+        return $this->dependencyInjector->get('ride\\library\\log\\Log');
     }
 
     /**
@@ -79,19 +114,18 @@ abstract class AbstractController extends LibAbstractController {
      * not found
      */
     protected function getUrl($routeId, array $arguments = null, array $queryParameters = null, $querySeparator = '&') {
-        $routerService = $this->dependencyInjector->get('ride\\service\\RouterService');
-
-        return $routerService->getUrl($this->request->getBaseScript(), $routeId, $arguments, $queryParameters, $querySeparator);
+        return $this->getWeb()->getUrl($routeId, $arguments, $queryParameters, $querySeparator);
     }
 
     /**
      * Sets the provided data as a json view
      * @param mixed $data
+     * @param integer $options Options for the json_encode function
      * @return null
      */
-    protected function setJsonView($data) {
+    protected function setJsonView($data, $options = JSON_PRETTY_PRINT) {
         $this->response->setHeader(Header::HEADER_CONTENT_TYPE, 'application/json');
-        $this->response->setView(new JsonView($data));
+        $this->response->setView(new JsonView($data, $options));
     }
 
     /**
@@ -101,14 +135,13 @@ abstract class AbstractController extends LibAbstractController {
      * @param string $name Name for the download
      * @param boolean $cleanUp Set to true to add an event to delete the file
      * after the response has been sent
+     * @param string $mime MIME type for the response headers, when not
+     * provided, it will be sniffed
      * @return null
      */
-    protected function setFileView(File $file, $name = null, $cleanUp = false) {
+    protected function setFileView(File $file, $name = null, $cleanUp = false, $mime = null) {
         if ($name === null) {
             $name = $file->getName();
-            $mimeFile = $file;
-        } else {
-            $mimeFile = $file->getChild($name);
         }
 
         $userAgent = $this->request->getHeader(Header::HEADER_USER_AGENT);
@@ -116,8 +149,15 @@ abstract class AbstractController extends LibAbstractController {
             $name = preg_replace('/\./', '%2e', $name, substr_count($name, '.') - 1);
         }
 
-        $mimeResolver = $this->dependencyInjector->get('ride\\web\\mime\\MimeResolver');
-        $mime = $mimeResolver->getMimeTypeByExtension($mimeFile->getExtension());
+        if ($mime === null) {
+            $mimeService = $this->dependencyInjector->get('ride\\service\\MimeService');
+            $mediaType = $mimeService->getMediaTypeForFile($file);
+            if (!$mediaType) {
+                throw new MvcException('Could not detect MIME for the provided file');
+            }
+
+            $mime = (string) $mediaType;
+        }
 
         $view = new FileView($file);
 
@@ -137,10 +177,12 @@ abstract class AbstractController extends LibAbstractController {
      * @param string $name Name for the download
      * @param boolean $cleanUp Set to true to add an event to delete the file
      * after the response has been sent
+     * @param string $mime MIME type for the response headers, when not
+     * provided, it will be sniffed
      * @return null
      */
-    protected function setDownloadView(File $file, $name = null, $cleanUp = false) {
-        $this->setFileView($file, $name, $cleanUp);
+    protected function setDownloadView(File $file, $name = null, $cleanUp = false, $mime = null) {
+        $this->setFileView($file, $name, $cleanUp, $mime);
 
         $this->response->setHeader(Header::HEADER_CONTENT_DESCRIPTION, 'File Transfer');
         $this->response->setHeader(Header::HEADER_CONTENT_DISPOSITION, 'attachment; filename="' . $name . '"');
