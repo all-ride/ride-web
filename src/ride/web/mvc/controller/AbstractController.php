@@ -162,6 +162,7 @@ abstract class AbstractController extends LibAbstractController {
         $view = new FileView($file);
 
         $this->response->setHeader(Header::HEADER_CACHE_CONTROL, 'no-cache, must-revalidate');
+        $this->response->setHeader(Header::HEADER_CONTENT_DISPOSITION, 'inline; filename="' . $name . '"');
         $this->response->setHeader(Header::HEADER_CONTENT_TYPE, $mime);
         $this->response->setView($view);
 
