@@ -116,6 +116,10 @@ class FileSessionIO implements SessionIO {
     public function read($id) {
         $file = $this->path->getChild($id);
         if (!$file->exists()) {
+            if ($this->log) {
+                $this->log->logDebug('Reading session ' . $id, 'session does not exist', 'web');
+            }
+
             return array();
         }
 
@@ -123,7 +127,7 @@ class FileSessionIO implements SessionIO {
 
         if ($file->getModificationTime() < $expires) {
             if ($this->log) {
-                $this->log->logDebug('Session ' . $id . ' has expired');
+                $this->log->logDebug('Reading session ' . $id, 'session has expired', 'web');
             }
 
             $file->delete();
@@ -136,10 +140,12 @@ class FileSessionIO implements SessionIO {
         $data = unserialize($serialized);
         if ($data === false) {
             if ($this->log) {
-                $this->log->logError('Could not read session');
+                $this->log->logError('Reading session ' . $id, 'session could not be unserialized', 'web');
             }
 
             $data = array();
+        } elseif ($this->log) {
+            $this->log->logDebug('Reading session ' . $id, null, 'web');
         }
 
         return $data;
