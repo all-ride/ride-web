@@ -631,7 +631,7 @@ class WebApplication implements Application {
             $path = '/';
         }
 
-        $cookie = new Cookie($this->request->getSessionCookieName(), $session->getId(), $expires, $domain, $path);
+        $cookie = $this->httpFactory->createCookie($this->request->getSessionCookieName(), $session->getId(), $expires, $domain, $path);
 
         $this->response->setCookie($cookie);
     }
