@@ -159,6 +159,42 @@ You can set a base URL for your route.
         "base": "http://www.example.com"
     }
 
+
+### Include Routes From Another File
+
+You can include a set of routes and prefix them with a path:
+
+Assume _config/routes.json_:
+```json
+{
+    "routes": [
+        {
+            "path": "/nl",
+            "file": "config/custom.routes.nl.json"
+        }
+    ]
+}
+```
+
+and _config/custom.routes.nl.json_:
+
+```
+{
+    "routes": [
+        {
+            "path": "/",
+            "controller": "vendor\\controller\\IndexController",
+        },
+        {
+            "path": "/test",
+            "controller": "vendor\\controller\\IndexController",
+        }
+    ]
+}
+```
+
+This will result in _/nl_ and _/nl/test_.
+
 ## Obtain A URL
 
 In PHP, you can obtain the full URL for defined routes from the Web application.
