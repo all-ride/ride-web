@@ -72,7 +72,7 @@ abstract class AbstractController extends LibAbstractController {
      * @return \ride\library\system\System
      */
     protected function getSystem() {
-        return $this->dependencyInjector->get('ride\\library\\systme\\System');
+        return $this->dependencyInjector->get('ride\\library\\system\\System');
     }
 
     /**
