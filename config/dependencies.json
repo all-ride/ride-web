@@ -31,6 +31,19 @@
                     ]
                 },
                 {
+                    "method": "setServerUrl",
+                    "arguments": [
+                        {
+                            "name": "url",
+                            "type": "parameter",
+                            "properties": {
+                                "key": "system.http.url",
+                                "default": "http://localhost"
+                            }
+                        }
+                    ]
+                },
+                {
                     "method": "setSessionCookieName",
                     "arguments": [
                         {
