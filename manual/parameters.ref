@@ -5,6 +5,7 @@ system.class.request                Class name for a new request
 system.class.response               Class name for a new response
 system.default.action               Callback for the default action when no route matched
 system.directory.config             Name of the config directory
+system.http.url                     Default URL for the HTTP factory in a CLI environment where no incoming URL can be resolved
 system.route.container.default      Dependency id of the route container IO in use
 system.route.container.cache        Dependency id of the cached route container IO
 system.session.path                 Path to the session storage

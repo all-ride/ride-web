@@ -16,7 +16,7 @@
         "ride/lib-config": ">=0.2.0",
         "ride/lib-dependency": ">=0.7.0",
         "ride/lib-event": ">=0.3.0",
-        "ride/lib-http": ">=0.6.0",
+        "ride/lib-http": ">=1.1.0",
         "ride/lib-http-client": ">=0.1.0",
         "ride/lib-log": ">=0.2.0",
         "ride/lib-mvc": ">=0.2.0",
