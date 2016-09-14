@@ -186,6 +186,11 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
                 unset($routeStruct['locale']);
             }
 
+            if (isset($routeStruct['permissions'])) {
+                $route->setPermissions($this->processParameter($routeStruct['permissions']));
+                unset($routeStruct['permissions']);
+            }
+
             if (isset($routeStruct['base'])) {
                 $route->setBaseUrl($this->processParameter($routeStruct['base']));
                 unset($routeStruct['base']);
