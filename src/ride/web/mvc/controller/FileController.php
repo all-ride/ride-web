@@ -56,12 +56,13 @@ class FileController extends AbstractController {
             return;
         }
 
-        if ($file->getExtension() == 'php') {
-            // the file is a PHP script, execute it
-            require_once($file->getAbsolutePath());
+        // potential security risk ...
+        // if ($file->getExtension() == 'php') {
+            // // the file is a PHP script, execute it
+            // require_once($file->getAbsolutePath());
 
-            return;
-        }
+            // return;
+        // }
 
         $fileModificationTime = $file->getModificationTime();
         $fileSize = $file->getSize();
