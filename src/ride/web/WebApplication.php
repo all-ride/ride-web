@@ -597,6 +597,10 @@ class WebApplication implements Application {
                     $this->response->setBody($body);
                     $this->response->setView(null);
                 }
+
+                if ($this->log) {
+                    $this->log->logDebug('Rendered view', get_class($view), System::LOG_SOURCE);
+                }
             }
         } catch (Exception $exception) {
             $this->handleException($exception);
