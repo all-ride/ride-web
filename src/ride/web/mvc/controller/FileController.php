@@ -12,6 +12,8 @@ use ride\service\MimeService;
 
 use ride\web\mvc\view\FileView;
 
+use \Exception;
+
 /**
  * Controller to host files from a directory
  */
@@ -47,7 +49,12 @@ class FileController extends AbstractController {
         }
 
         // lookup the file
-        $file = $this->getFile($path);
+        $file = null;
+        try {
+            $file = $this->getFile($path);
+        } catch (Exception $exception) {
+            $this->getLog()->logException($exception);
+        }
 
         if (!$file) {
             // file not found, set status code
@@ -97,7 +104,7 @@ class FileController extends AbstractController {
     }
 
     /**
-     * Gets the file from the Zibo include path
+     * Gets the file from the include path
      * @param string $path Relative path of the file in the web directory
      * @return null|\ride\library\system\file\File
      */
