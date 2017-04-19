@@ -1,5 +1,9 @@
 # ride-web
 
+## 1.0.2 - 2017-04-19
+### Updated
+- cache route permissions
+
 ## [1.0.1] - 2017-02-10
 ### Added 
 - log message when the view is rendered
