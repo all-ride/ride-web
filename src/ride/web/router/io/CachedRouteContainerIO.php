@@ -213,6 +213,11 @@ class CachedRouteContainerIO implements RouteContainerIO {
                 $output .= '$route->setBaseUrl(' . var_export($baseUrl, true) . ');' . "\n";
             }
 
+            $permissions = $route->getPermissions();
+            if ($permissions) {
+                $output .= '$route->setPermissions(' . var_export($permissions, true) . ');' . "\n";
+            }
+
             $output .= '$container->setRoute($route);' . "\n\n";
         }
 
