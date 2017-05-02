@@ -1,5 +1,9 @@
 # ride-web
 
+## 1.1.0 - 2017-05-02
+### Updated
+- implemented "base" for file includes in routes.json
+
 ## 1.0.2 - 2017-04-19
 ### Updated
 - cache route permissions
