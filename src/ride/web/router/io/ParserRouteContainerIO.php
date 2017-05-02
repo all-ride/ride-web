@@ -94,16 +94,18 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
      * @param \ride\library\router\RouteContainer $routeContainer
      * @param \ride\library\system\file\File $file
      * @param string $prefix Path prefix
+     * @param string $baseUrl Base URL for all routes in this file without the
+     * base URL set
      * @return null
      */
-    protected function readContainerFromFile(RouteContainer $routeContainer, File $file, $prefix = null) {
+    protected function readContainerFromFile(RouteContainer $routeContainer, File $file, $prefix = null, $baseUrl = null) {
         try {
             $content = $file->read();
             $content = $this->parser->parseToPhp($content);
 
             if (isset($content['routes'])) {
                 foreach ($content['routes'] as $routeStruct) {
-                    $this->readContainerFromRouteStruct($routeContainer, $routeStruct, $prefix);
+                    $this->readContainerFromRouteStruct($routeContainer, $routeStruct, $prefix, $baseUrl);
                 }
             }
 
@@ -125,7 +127,7 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
      * @param string $prefix Path prefix
      * @return null
      */
-    protected function readContainerFromRouteStruct(RouteContainer $routeContainer, array $routeStruct, $prefix) {
+    protected function readContainerFromRouteStruct(RouteContainer $routeContainer, array $routeStruct, $prefix = null, $baseUrl = null) {
         if (!isset($routeStruct['path'])) {
             throw new RouterException('Could not parse route structure: no path set');
         }
@@ -133,13 +135,18 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
         $path = $this->processParameter($routeStruct['path']);
         unset($routeStruct['path']);
 
+        if (isset($routeStruct['base'])) {
+            $baseUrl = $this->processParameter($routeStruct['base']);
+            unset($routeStruct['base']);
+        }
+
         if (isset($routeStruct['file'])) {
             $file = $this->fileBrowser->getFile($routeStruct['file']);
             if (!$file) {
                 throw new RouterException('Could not parse route structure: ' . $routeStruct['file'] . ' not found');
             }
 
-            $this->readContainerFromFile($routeContainer, $file, rtrim($path, '/'));
+            $this->readContainerFromFile($routeContainer, $file, rtrim($path, '/'), $baseUrl);
 
             unset($routeStruct['file']);
         } else {
@@ -201,9 +208,8 @@ class ParserRouteContainerIO extends AbstractIO implements RouteContainerIO {
                 $route->setPermissions($permissions);
             }
 
-            if (isset($routeStruct['base'])) {
-                $route->setBaseUrl($this->processParameter($routeStruct['base']));
-                unset($routeStruct['base']);
+            if ($baseUrl) {
+                $route->setBaseUrl($baseUrl);
             }
 
             $arguments = $this->parseArgumentsFromRouteStruct($routeStruct);
