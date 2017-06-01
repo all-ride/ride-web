@@ -1,5 +1,9 @@
 # ride-web
 
+## 1.1.1 - 2017-06-01
+### Updated
+- pass $isSecure to HttpFactory when creating a new request
+
 ## 1.1.0 - 2017-05-02
 ### Updated
 - implemented "base" for file includes in routes.json

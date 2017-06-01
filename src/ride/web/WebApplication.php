@@ -277,7 +277,7 @@ class WebApplication implements Application {
                 $isSecure = null;
             }
 
-            $request = $this->httpFactory->createRequest($path, $method, $protocol, $headers, $body);
+            $request = $this->httpFactory->createRequest($path, $method, $protocol, $headers, $body, $isSecure);
         }
 
         return $request;
