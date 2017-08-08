@@ -1,5 +1,9 @@
 # ride-web
 
+## Unreleased
+### Added
+- added CGIPassAuth in comment to .htaccess, needed when using HTTP authentication
+
 ## 1.1.1 - 2017-06-01
 ### Updated
 - pass $isSecure to HttpFactory when creating a new request

@@ -13,6 +13,8 @@ Options +FollowSymLinks
 # Default handler will be index.php
 DirectoryIndex index.php
 
+# Uncomment this directive when you enabled the HTTP authenticator
+# CGIPassAuth on
 
 # ----------------------------------------------------------------------
 # URL rewrite
