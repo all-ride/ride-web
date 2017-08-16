@@ -2,9 +2,11 @@
 
 namespace ride\service;
 
+use ride\library\router\exception\RouterException;
 use ride\library\router\Alias;
 use ride\library\router\Router;
 use ride\library\router\Route;
+use ride\library\router\RouterResult;
 use ride\library\router\Url;
 
 use ride\web\router\io\RouteContainerIO;
@@ -57,7 +59,13 @@ class RouterService {
      * @return \ride\library\router\RouterResult
      */
     public function route($method, $path, $baseUrl = null) {
-        return $this->router->route($method, $path, $baseUrl);
+        try {
+            $result = $this->router->route($method, $path, $baseUrl);
+        } catch (RouterException $e) {
+            $result = new RouterResult();
+        }
+
+        return $result;
     }
 
     /**
