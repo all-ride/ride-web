@@ -158,14 +158,18 @@ class FileSessionIO implements SessionIO {
      * @return null
      */
     public function write($id, array $data) {
-        $serialized = serialize($data);
-
         $file = $this->path->getChild($id);
 
-        $parent = $file->getParent();
-        $parent->create();
+        if ($data) {
+            $serialized = serialize($data);
 
-        $file->write($serialized);
+            $parent = $file->getParent();
+            $parent->create();
+
+            $file->write($serialized);
+        } elseif ($file->exists()) {
+            $file->delete();
+        }
     }
 
 }
