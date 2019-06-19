@@ -1,5 +1,9 @@
 # ride-web
 
+## 1.1.3 - 2019-06-19
+### Updated
+- remove session file for an empty session
+
 ## 1.1.2 - 2017-08-16
 ### Added
 - added CGIPassAuth in comment to .htaccess, needed when using HTTP authentication
