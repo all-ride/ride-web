@@ -5,7 +5,7 @@ namespace ride\web\mvc\view;
 use ride\library\mvc\view\View;
 use ride\library\StringHelper;
 
-use \Exception;
+use \Throwable;
 
 /**
  * View to display an exception
@@ -23,7 +23,7 @@ class ExceptionView implements View {
      * @param Exception $exception
      * @return null
      */
-    public function __construct(Exception $exception) {
+    public function __construct(Throwable $exception) {
         $this->exception = $exception;
     }
 
@@ -115,7 +115,7 @@ class ExceptionView implements View {
      * @param Exception $exception
      * @return array Array with Exception instances in order of cause
      */
-    protected function getExceptions(Exception $exception) {
+    protected function getExceptions(Throwable $exception) {
         $exceptions = array();
 
         do {
@@ -131,7 +131,7 @@ class ExceptionView implements View {
      * @param Exception $exception
      * @return array Array containing the values needed to display the exception
      */
-    protected function getExceptionArray(Exception $exception) {
+    protected function getExceptionArray(Throwable $exception) {
         $message = $exception->getMessage();
 
         $array = array();
@@ -153,7 +153,7 @@ class ExceptionView implements View {
      * @param integer $offset Number of lines before and after the thrown line
      * @return array Array containing the values needed to display the exception
      */
-    protected function getExceptionSource(Exception $exception, $offset = 5) {
+    protected function getExceptionSource(Throwable $exception, $offset = 5) {
         if (!file_exists($exception->getFile())) {
             return '';
         }
