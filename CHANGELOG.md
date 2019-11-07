@@ -1,5 +1,9 @@
 # ride-web
 
+## 1.1.4 - 2019-11-06
+### Updated
+- use Throwable for ExceptionView instead of Exception
+
 ## 1.1.3 - 2019-06-19
 ### Updated
 - remove session file for an empty session
