@@ -1,5 +1,7 @@
 # ride-web
-
+## 1.1.5 - 2023-07-06
+### Updated
+- avoid a file injection vulnerability we only return file contents of file paths that start with the public dir and application/public
 ## 1.1.4 - 2019-11-06
 ### Updated
 - use Throwable for ExceptionView instead of Exception
