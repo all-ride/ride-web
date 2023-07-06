@@ -54,13 +54,13 @@ class ExceptionView implements View {
         $output .= "<html>\n";
         $output .= "    <head>\n";
         $output .= "        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
-        $output .= "        <title>:'-( Whoopsie!</title>\n";
-        $output .= "        <style>pre { padding: 5px; background-color: #333; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; } h1, a, .icon { color: #f3f3f3; }</style>\n";
+        $output .= "        <title>😢 Whoopsie!</title>\n";
+        $output .= "        <style>pre { padding: 5px; background-color: #ACE3FE; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; } h1, a, .icon { color: #393E46; }</style>\n";
         $output .= "    </head>\n";
-        $output .= "    <body style=\"background-color: #111; color: #e3e3e3; font-family: sans-serif;\">\n";
+        $output .= "    <body style=\"background-color: #D8D8D8; color: #333333; font-family: sans-serif; font-size: 1.2em;\">\n";
         $output .= "        <div style=\"padding-left: 75px;\">\n";
-        $output .= "            <div style=\"position: absolute; left: 20px; top: 25px; width: 50px; font-weight: bold; font-size: 1.5em;\" class=\"icon\">:'-(</div>\n";
-        $output .= "			<h1>Whoopsie!</h1>\n";
+        $output .= "            <div style=\"position: absolute; left: 20px; top: 20px; width: 50px; font-weight: bold; font-size: 2em;\" class=\"icon\">😢</div>\n";
+        $output .= "			<h1 style=\"color:#FE3000\">Whoops!</h1>\n";
         $output .= "			<p>An exception is thrown and it was not caught by the system.</p>\n";
         $output .= "			<div style=\"font-size: smaller;\">\n";
 
@@ -72,7 +72,7 @@ class ExceptionView implements View {
             $output .= '<h3><strong>' . $message . '</strong></h3>';
 
             if ($messageLines) {
-                $output .= '<pre>';
+                $output .= '<pre style="background-color: #fff; color: #333333">';
                 foreach ($messageLines as $messageLine) {
                     $output .= $messageLine . "\n";
                 }
@@ -82,20 +82,22 @@ class ExceptionView implements View {
             if ($index == 0) {
                 $source = $this->getExceptionSource($exception['exception']);
                 $fileUrl = $exception['file'];
+                $line = substr(strrchr($fileUrl, ':'), 1);
 
                 $sc = strrpos($fileUrl, ':');
                 if ($sc !== false) {
                     $fileUrl = substr($fileUrl, 0, $sc);
+
                 }
 
                 $output .= '<p>The code:</p>';
-                $output .= '<p><a href="file://' . $fileUrl . '">' . $exception['file'] . '</a></p>';
-                $output .= '<pre>' . htmlentities($source) . '</pre>';
+                $output .= '<p><a href="phpstorm://open?file=' . $fileUrl . '&line='.$line.'">' . $exception['file'] . '</a></p>';
+                $output .= '<pre style="background-color: #fff; color: #333333">' . htmlentities($source) . '</pre>';
 
                 $source = null;
             }
             $output .= '<p>The trace:</p>';
-            $output .= '<pre>' . $exception['trace'] . '</pre>';
+            $output .= '<pre style="background-color: #fff; color: #333333">' . $exception['trace'] . '</pre>';
 
             if ($index != $indexLastException) {
                 $output .= "<p>Causes:</p>";

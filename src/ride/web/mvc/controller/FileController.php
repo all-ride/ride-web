@@ -2,31 +2,30 @@
 
 namespace ride\web\mvc\controller;
 
+use Exception;
 use ride\library\http\Header;
 use ride\library\http\Request;
 use ride\library\http\Response;
 use ride\library\system\file\browser\FileBrowser;
 use ride\library\system\file\File;
-
 use ride\service\MimeService;
-
 use ride\web\mvc\view\FileView;
-
-use \Exception;
 
 /**
  * Controller to host files from a directory
  */
-class FileController extends AbstractController {
-
+class FileController extends AbstractController
+{
     /**
      * Constructs a new file controller
+     *
      * @param \ride\library\system\file\browser\FileBrowser $fileBrowser
      * @param \ride\service\MimeService $mimeService
      * @param \ride\library\system\file\File $path
      * @return null
      */
-    public function __construct(FileBrowser $fileBrowser, MimeService $mimeService, File $path) {
+    public function __construct(FileBrowser $fileBrowser, MimeService $mimeService, File $path)
+    {
         $this->fileBrowser = $fileBrowser;
         $this->mimeService = $mimeService;
         $this->path = $path;
@@ -34,9 +33,11 @@ class FileController extends AbstractController {
 
     /**
      * Action to host a file. The filename is provided by the arguments as tokens
+     *
      * @return null
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         // get the requested path of the file
         $args = func_get_args();
         $path = implode('/', $args);
@@ -56,7 +57,12 @@ class FileController extends AbstractController {
             $this->getLog()->logException($exception);
         }
 
-        if (!$file) {
+        // To avoid a file injection vulnerability we only return file contents of file paths that start with the public dir and application/public
+        $publicDir = $this->fileBrowser->getPublicDirectory()->getAbsolutePath();
+        $appPublicDir = $this->fileBrowser->getApplicationDirectory()->getChild('public')->getAbsolutePath();
+        if (!$file ||
+            substr($file->getAbsolutePath(), 0, strlen($publicDir)) !== $publicDir ||
+            substr($file->getAbsolutePath(), 0, strlen($appPublicDir)) !== $appPublicDir) {
             // file not found, set status code
             $this->response->setStatusCode(Response::STATUS_CODE_NOT_FOUND);
 
@@ -65,10 +71,10 @@ class FileController extends AbstractController {
 
         // potential security risk ...
         // if ($file->getExtension() == 'php') {
-            // // the file is a PHP script, execute it
-            // require_once($file->getAbsolutePath());
+        // // the file is a PHP script, execute it
+        // require_once($file->getAbsolutePath());
 
-            // return;
+        // return;
         // }
 
         $fileModificationTime = $file->getModificationTime();
@@ -94,7 +100,7 @@ class FileController extends AbstractController {
             $mediaType = 'application/octet-stream';
         }
 
-        $this->response->setHeader(Header::HEADER_CONTENT_TYPE, (string) $mediaType);
+        $this->response->setHeader(Header::HEADER_CONTENT_TYPE, (string)$mediaType);
         $this->response->setHeader(Header::HEADER_CONTENT_LENGTH, $fileSize);
 
         if (!$this->request->isHead()) {
@@ -105,10 +111,12 @@ class FileController extends AbstractController {
 
     /**
      * Gets the file from the include path
+     *
      * @param string $path Relative path of the file in the web directory
      * @return null|\ride\library\system\file\File
      */
-    protected function getFile($path) {
+    protected function getFile($path)
+    {
         $plainFile = $this->path->getChild($path);
 
         $file = $this->fileBrowser->getFile($plainFile);
@@ -116,9 +124,10 @@ class FileController extends AbstractController {
             return $file;
         }
 
-        $encodedPath = $plainFile->getParent()->getPath() . File::DIRECTORY_SEPARATOR . urlencode($plainFile->getName());
+        $encodedPath = $plainFile->getParent()->getPath() . File::DIRECTORY_SEPARATOR . urlencode(
+                $plainFile->getName()
+            );
 
         return $this->fileBrowser->getFile($encodedPath);
     }
-
 }
