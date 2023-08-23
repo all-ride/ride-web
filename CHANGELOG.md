@@ -1,4 +1,7 @@
 # ride-web
+## 1.2  2023-08-23
+### Updated
+- First check if method exists
 ## 1.1.5 - 2023-07-06
 ### Updated
 - avoid a file injection vulnerability we only return file contents of file paths that start with the public dir and application/public
