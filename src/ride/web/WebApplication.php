@@ -214,9 +214,9 @@ class WebApplication implements Application {
     }
 
     /**
-    * Gets the HTTP factory
-    * @return \ride\library\http\HttpFactory
-    */
+     * Gets the HTTP factory
+     * @return \ride\library\http\HttpFactory
+     */
     public function getHttpFactory() {
         return $this->httpFactory;
     }
@@ -236,7 +236,7 @@ class WebApplication implements Application {
      * @return null
      */
     public function setRequest(Request $request = null) {
-        if ($this->dependencyInjector && method_exists($request, 'setDependencyInjector')) {
+        if ($this->dependencyInjector && $request && method_exists($request, 'setDependencyInjector')) {
             $request->setDependencyInjector($this->dependencyInjector);
         }
 
