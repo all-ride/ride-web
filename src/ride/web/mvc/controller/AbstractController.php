@@ -32,6 +32,8 @@ abstract class AbstractController extends LibAbstractController {
      */
     protected $dependencyInjector;
 
+    protected $downloadFile;
+
     /**
      * Sets the instance of the configuration
      * @param \ride\library\config\Config $config

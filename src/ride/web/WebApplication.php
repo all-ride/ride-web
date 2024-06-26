@@ -707,7 +707,7 @@ class WebApplication implements Application {
      * @return null
      * @throws Exception when no listeners available for the exception event
      */
-    protected function handleException(Exception $exception) {
+    protected function handleException(\Throwable $exception) {
         if ($this->log) {
             $this->log->logException($exception, System::LOG_SOURCE);
         }

@@ -16,6 +16,12 @@ use ride\web\mvc\view\FileView;
  */
 class FileController extends AbstractController
 {
+    protected $fileBrowser;
+
+    protected $mimeService;
+
+    protected $path;
+
     /**
      * Constructs a new file controller
      *

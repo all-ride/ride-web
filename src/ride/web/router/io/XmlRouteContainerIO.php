@@ -194,7 +194,7 @@ class XmlRouteContainerIO implements RouteContainerIO {
 
             $isDynamic = $this->getAttribute($file, $element, self::ATTRIBUTE_DYNAMIC, false);
             if ($isDynamic !== '') {
-                $route->setIsDynamic(in_array('1', 'true', 'yes', strtolower($isDynamic)));
+                $route->setIsDynamic(in_array(strtolower($isDynamic), ['1', 'true', 'yes'], true));
             }
 
             $arguments = $this->readArgumentsFromRouteElement($file, $element);

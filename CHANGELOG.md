@@ -1,5 +1,8 @@
 # ride-web
-## 1.2  2023-08-23
+## 1.3.0 - 2024-06-26
+### updated
+- Updated to be compatible with php 8.3
+## 1.2.0 -  2023-08-23
 ### Updated
 - First check if method exists
 ## 1.1.5 - 2023-07-06

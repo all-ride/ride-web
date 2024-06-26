@@ -29,6 +29,11 @@ class CachedRouteContainerIO implements RouteContainerIO {
     private $file;
 
     /**
+     * @var true
+     */
+    private $needsWrite;
+
+    /**
      * Constructs a new cached router container
      * @param \ride\web\router\io\RouterContainerIO $io RouterContainerIO which
      * needs a cache
