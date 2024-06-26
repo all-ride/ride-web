@@ -16,6 +16,10 @@ use ride\web\router\io\RouteContainerIO;
  */
 class RouterService {
 
+    protected $router;
+    protected $routeContainer;
+    protected $routeContainerIO;
+
     /**
      * Constructs a new routing service
      * @param \ride\library\router\Router $router

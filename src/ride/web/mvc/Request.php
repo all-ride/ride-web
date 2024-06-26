@@ -86,7 +86,7 @@ class Request extends LibRequest {
         }
 
         if (!$sessionId) {
-            $sessionId = md5(time() . rand(100000, 999999));
+            $sessionId = md5(time() . random_int(100000, 999999));
         }
 
         if (!$this->dependencyInjector) {
